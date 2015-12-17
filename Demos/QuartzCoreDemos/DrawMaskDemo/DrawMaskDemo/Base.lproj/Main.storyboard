@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4BD-fM-p1c">
+                                <rect key="frame" x="200" y="250" width="200" height="100"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="banner.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="oL8-zr-bQ3">
+                                        <rect key="frame" x="0.0" y="0.0" width="200" height="100"/>
+                                    </imageView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="umm-2Y-Bps" customClass="HGCRoundCornerMaskView">
+                                        <rect key="frame" x="0.0" y="0.0" width="200" height="100"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="3hd-qk-3gw"/>
+                                    <constraint firstAttribute="bottom" secondItem="oL8-zr-bQ3" secondAttribute="bottom" id="ETa-X7-Sda"/>
+                                    <constraint firstItem="oL8-zr-bQ3" firstAttribute="top" secondItem="4BD-fM-p1c" secondAttribute="top" id="LZr-bx-SfE"/>
+                                    <constraint firstItem="umm-2Y-Bps" firstAttribute="top" secondItem="4BD-fM-p1c" secondAttribute="top" id="Wqg-DT-Nbr"/>
+                                    <constraint firstItem="umm-2Y-Bps" firstAttribute="leading" secondItem="4BD-fM-p1c" secondAttribute="leading" id="XUn-VH-ElI"/>
+                                    <constraint firstItem="oL8-zr-bQ3" firstAttribute="leading" secondItem="4BD-fM-p1c" secondAttribute="leading" id="adW-RJ-3df"/>
+                                    <constraint firstAttribute="trailing" secondItem="oL8-zr-bQ3" secondAttribute="trailing" id="gvf-79-8eo"/>
+                                    <constraint firstAttribute="bottom" secondItem="umm-2Y-Bps" secondAttribute="bottom" id="hUV-xx-Lnk"/>
+                                    <constraint firstAttribute="height" constant="100" id="in8-D1-BBt"/>
+                                    <constraint firstAttribute="trailing" secondItem="umm-2Y-Bps" secondAttribute="trailing" id="wTa-6x-EI6"/>
+                                </constraints>
+                            </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="banner.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="N9u-pc-cws">
+                                <rect key="frame" x="200" y="131" width="200" height="100"/>
+                                <color key="backgroundColor" red="0.36470588240000001" green="0.14901960780000001" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="1lh-cr-fJi"/>
+                                    <constraint firstAttribute="height" constant="100" id="d72-kR-wIG"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="N9u-pc-cws" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="0Kh-k3-V3F"/>
+                            <constraint firstItem="4BD-fM-p1c" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="3vz-bb-XXA"/>
+                            <constraint firstItem="umm-2Y-Bps" firstAttribute="top" secondItem="N9u-pc-cws" secondAttribute="bottom" constant="19" id="RaD-5v-Jne"/>
+                            <constraint firstItem="4BD-fM-p1c" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="p1q-N4-sA8"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imgv" destination="N9u-pc-cws" id="eaV-hU-jOB"/>
+                        <outlet property="maskView" destination="umm-2Y-Bps" id="hfd-zd-OqG"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="434" y="387"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="banner.jpg" width="345" height="230"/>
+    </resources>
+</document>
