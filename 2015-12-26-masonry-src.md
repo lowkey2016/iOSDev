@@ -1,10 +1,8 @@
 # 世界那么大，我已经看了（一）Masonry 源码
----
 
 上两周把 Masonry 看了一遍，然后今晚又看了第二遍，主要看了 Core 部分，代码很好看。
 
 # 架构划分
----
 
 我把 Masonry 的架构大致划分如下：
 
@@ -15,8 +13,8 @@
 * **Attribute**  这里放的是约束的一部分属性模型。
 * **Utils**  工具，如 Debug 和 Box Value.
 
+
 # Public
----
 
 View + MASAdditions, NSArray + MASAdditions, ViewController + MASAdditions 这三个分类提供了 View / View Array / ViewController 的一些属性的存取方法，如 mas_left, mas_topLayoutGuide 等，区分 iOS 和 Mac 平台。
 
@@ -24,8 +22,8 @@ View + MASAdditions, NSArray + MASAdditions, ViewController + MASAdditions 这�
 
 View + MASShorthandAdditions, NSArray + MASShorthandAdditions 这两个分类为以上方法提供了 shorthand 接口，其中用宏来简化代码量的写法很好玩，虽然也很常见。
 
+
 # Attribute
----
 
 个人觉得 Masonry 中比较不好的是，类之间的命名有点意义不明，因为太相似了。所以必须首先在概念上区分它们：
 
@@ -79,8 +77,8 @@ make.left.equalTo(secondView.right);
 
 其实它是下文要提到的 MASViewConstraint 的一个属性，这个更加容易混淆。
 
+
 # Utils
----
 
 ## MASUtilities
 
@@ -105,8 +103,8 @@ MASAttachKeys 这个宏把 View 和用于 Debug 的 keys 自动关联起来了�
 
 注意结合上面的 MASAttachKeys 这个宏来用。
 
+
 # Core
----
 
 有了上面的积累，最后我们来看 Core 部分。 Core 部分做的工作就是 Make and Install Constraints to View. 
 
@@ -390,8 +388,8 @@ make.height.equalTo(blueView.height);
 
 其中 remakeConstraints 会将 maker.view 的所有已安装约束先移除。然后遍历 constraints 数组中的 MASConstraint 元素，如果是 updateConstraints 还要设置约束的 updateExisting 标志位，如果是 makeConstraints 则直接 install 对应的约束，详细代码见上文中 MASViewConstraint 的 install 方法。
 
+
 # 小结
----
 
 最后请告诉我：
 
