@@ -26,7 +26,7 @@ MVVM 中有一个非常重要的概念就是数据绑定，目前本人的肤浅
 
 ```
 ViewModel 层直接操作 Model 层，承担了获取数据、解析数据、转换数据等职责。
-View 层包括 View 和 ViewController ，View 会持有一个 ViewModel ，并和其绑定。但是 ViewModel 不应该知道 View 的存在，只能通过数据绑定把数据回调到 View.
+View 层包括 View 和 ViewController ，View 会持有一个 ViewModel ，并和其绑定，ViewModel 会暴露一些 readonly 的 properties 出来给 View 去获取装配。但是 ViewModel 不应该知道 View 的存在，只能通过数据绑定把数据回调到 View. 
 ```
 
 * 怎么看一个架构好不好？
