@@ -187,7 +187,7 @@ MASCompositeConstraint 是 MASConstraint 的子类，它是一组 NSLayoutConstr
 
 ## return type 和链式调用
 
-注意 MASConstraint 的每一个 getter 方法调用返回的都是 (MASConstraint * (^)(...)) ，注意是一个 Block ，在后面加上参数后i调用这个 Block 了，Block 的返回值就是更新后的 MASConstraint ，从而让链式调用一直传递下去。
+注意 MASConstraint 的每一个 getter 方法调用返回的都是 (MASConstraint * (^)(...)) ，注意是一个 Block ，在后面加上参数后调用这个 Block 了，Block 的返回值就是更新后的 MASConstraint ，从而让链式调用一直传递下去。
 
 而 with 和 and 内部则是什么都不做。
 
