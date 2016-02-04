@@ -20,7 +20,7 @@
 ## AutoLayout  2.5'
 <!--* 学习 VFL -- 0.5'-->
 * 看 Apple 文档 -- 2'
-<!--* 熟悉 Masonry 的使用，看 Masonry 源码并总结 -- 2'-->
+* `熟悉 Masonry 的使用，看 Masonry 源码并总结 -- 2'`
 
 ## 动画  0'
 * Github Advanced Core Animation Technology 1 - 15 -- 2'
@@ -28,7 +28,7 @@
 * POP -- 5'
 
 ## UI组件  1'
-<!--* MJRefresh -- 1'-->
+* `MJRefresh -- 1'`
 * YYImage -- 5'
 * YYText -- 5'
 * WZLBadge -- 0.5'
@@ -38,8 +38,8 @@
 # Foundation
 
 ## 数据存储  2.1'
-<!--* SDURLCache -- 0.1'-->
-<!--* YYCache -- 2'-->
+* `SDURLCache -- 0.1'`
+* `YYCache -- 2'`
 * Realm -- 0.1'
 * SQLite -- 5'
 * FMDB -- 5'
@@ -56,8 +56,8 @@
 ## Model层工具  3'
 * MJExtension -- 2'
 * JSONModel -- 2'
-<!--* YYModel -- 2'-->
-<!--* AutoCoding -- 1'-->
+* `YYModel -- 2'`
+* `AutoCoding -- 1'`
 
 ## 多线程  0'
 
@@ -72,14 +72,14 @@
 * LLDB -- 1'
 * Chisel -- 1'
 
-## Xcode插件  0‘
+## Xcode插件  0'
 
 ------------------------------------
 
 # iOS
 
 ## App和框架  1'
-<!--* HackerNews App -- 1'-->
+* `HackerNews App -- 1'`
 * Git Bucket -- 3'
 * Coding-iOS App -- 3'
 * 苏宁易购 App -- 4'
@@ -91,7 +91,7 @@
 * Yep -- 4'
 
 ## 架构和设计模式  1'
-<!--* AOP ** Aspects -- 1'-->
+* `AOP ** Aspects -- 1'`
 * 《OC编程之道》 -- 5'
 * VIPER -- 1' 
 
@@ -128,7 +128,7 @@
 * 《黑客攻防技术宝典》 -- 4‘
 
 ## 产品的用户体验、交互设计和UI设计  0.5'
-<!--* 《从0到1》 -- 0.5'-->
+* `《从0到1》 -- 0.5'`
 * 《结网》 -- 5'
 
 ------------------------------------
