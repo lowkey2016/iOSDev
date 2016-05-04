@@ -137,3 +137,7 @@
 * 《深入解析 Mac OS X & iOS 操作系统》 -- 10'
 * 《OS X 与 iOS 内核编程》 -- 5'
 * 《Cocoa编程》 -- 3'
+
+# watchOS  
+
+* https://github.com/ipader/SwiftGuide/tree/master/Apple%20Watch -- 5'
