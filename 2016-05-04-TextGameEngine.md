@@ -190,7 +190,7 @@ TGEBaseModel_YYModel_NSCoding_NSCopying_Equal
 
 **TGEFileManager** 负责对 Sandbox 中的文件进行操作，包括获取目录、新建目录、复制移动删除文件、存取可序列化的数据等。目前正投入生产环境实践中，还需要经受时间和用户量的考验。
 
-**TGENinePatchImageParser** 负责读取点9图，由于文字解析引擎追求的是 iOS 和 Android 使用同一套图片素材，而 Android 的点9图能够很好地达到素材拉伸不变形的效果，所以后期 **TGEngine for iOS** 也加入了对点9图读取的支持。代码主要参考自 [shiami/SWNinePatchImageFactory](https://github.com/shiami/SWNinePatchImageFactory) ，注意源代码对2倍点9图的支持有问题，已经有开发者发了解决了的 PR 但是作者没合并，该库已经2年没有维护过了，需要我们自己进行改造。目前 **TGEngine** 还不支持三倍点9图的读取，我还没进行修复，因为目前2倍点9图在3倍分辨率的设备上同样表现优异，没有出现失真等现象。
+**TGENinePatchImageParser** 负责读取点9图，由于文字解析引擎追求的是 iOS 和 Android 使用同一套图片素材，而 Android 的点9图能够很好地达到素材拉伸不变形的效果，所以后期 **TGEngine for iOS** 也加入了对点9图读取的支持。代码主要参考自 [shiami/SWNinePatchImageFactory](https://github.com/shiami/SWNinePatchImageFactory) ，注意源代码对2倍点9图的支持有问题，已经有开发者发了解决了的 PR 但是作者没合并，该库已经2年没有维护过了，需要我们自己进行改造。注：代码修改后，读取三倍的点9图也是成功的。
 
 ![dot9](./2016-05-04-TextGameEngine/dot9.png)
 
