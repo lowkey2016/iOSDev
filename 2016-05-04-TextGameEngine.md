@@ -1234,8 +1234,6 @@ Realm 的接口还是封装得非常简单易用的，有配套的 .realm 查看
 
 ## 请多多支持赛高文字游戏
 
-汉囧记官网：http://saigao.4566.com/m_hanjiongdi/ ，已经在 AppStore 上线
+汉囧记官网：http://saigao.4566.com/m_hanjiongdi/
 
-The Dream 官网：http://saigao.4566.com/thedream/ ，等待 AppStore 审核
-
-The Dream 企业版： http://fir.im/3n1v
+The Dream 官网：http://saigao.4566.com/thedream/
