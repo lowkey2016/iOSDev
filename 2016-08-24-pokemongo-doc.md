@@ -68,7 +68,7 @@ static float y = -1;
 
 第二步，配置证书，编译产生重签名的动态库。
 
-![](./dylib-codesign.png)
+![](./2016-08-24-pokemongo-doc/dylib-codesign.png)
 
 第三步，把重签名的动态库打进 ipa. Xcode 脚本如下：
 
@@ -101,8 +101,8 @@ mv "${APP_NAME}.zip" "${APP_NAME}.ipa"
 
 有些 provision profile 会重复下载几个，在重签名的时候为了避免用错 profile，注意先删除多余的，确保只留有一个。文件的定位方法是，commond + , 打开账户设置，然后选择团队和看到证书列表。如下图所示：
 
-![](./show-profiles-1.png)
-![](./show-profiles-2.png)
+![](./2016-08-24-pokemongo-doc/show-profiles-1.png)
+![](./2016-08-24-pokemongo-doc/show-profiles-2.png)
 
 # Chrome控制模拟定位
 
@@ -232,7 +232,7 @@ delay 0.01activate application "Xcode"tell application "System Events"	tell p
 
 ## 原理
 
-![](./controller.png)
+![](./2016-08-24-pokemongo-doc/controller.png)
 
 核心是利用 Xcode 调试时的 Simulate Location 功能来模拟设备的全局地理位置，从而影响到 Pokemon Go 游戏。
 
