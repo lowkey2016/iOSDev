@@ -1234,6 +1234,10 @@ Realm 的接口还是封装得非常简单易用的，有配套的 .realm 查看
 
 ## 请多多支持赛高文字游戏
 
-汉囧记官网：http://saigao.4566.com/m_hanjiongdi/
+[赛高文字 App](https://itunes.apple.com/au/app/%E8%B5%9B%E9%AB%98%E6%96%87%E5%AD%97/id1138256032?mt=8)
 
-The Dream 官网：http://saigao.4566.com/thedream/
+[汉囧记](https://itunes.apple.com/au/app/%E6%B1%89%E5%9B%A7%E8%AE%B0-%E6%88%91%E7%9A%84%E6%9C%8B%E5%8F%8B%E6%88%90%E4%B8%BA%E4%BA%86%E6%B1%89%E7%81%B5%E5%B8%9D/id1099068942?mt=8)
+
+[The Dream 单品游戏](https://itunes.apple.com/au/app/the-dream-%E8%BF%B7%E5%A4%B1%E6%A2%A6%E5%A2%83%E7%9A%84%E5%B0%91%E5%B9%B4/id1108740088?mt=8)
+
+[一只薛定谔单品游戏](https://itunes.apple.com/au/app/%E4%B8%80%E5%8F%AA%E8%96%9B%E5%AE%9A%E8%B0%94/id1204725131?mt=8)
