@@ -27,13 +27,11 @@ REP_TYPE_CUR = 3
 REP_TYPE_FEEDBACK = 4
 
 def common_read_data(st_symbol, months_from_2017, report_type):
-	if st_symbol is None:
-		return None
-	if months_from_2017 < 1 or months_from_2017 > 4:
-		print "error months_from_2017: %d" % months_from_2017
-		return None
+	assert st_symbol is not None
+	assert months_from_2017 >= 1 and months_from_2017 <= 4
 	now = int(time.time())
 	size = months_from_2017 + (2016 - 2007 + 1) * 4 # 一直算到 2007 Q1
+	assert_if_size_err = True
 	if REP_TYPE_MAIN == report_type:
 		url = "https://xueqiu.com/stock/f10/finmainindex.json?symbol=%s&page=1&size=%d&_=%d" % (st_symbol, size, now)
 	elif REP_TYPE_PROFIT == report_type:
@@ -42,8 +40,10 @@ def common_read_data(st_symbol, months_from_2017, report_type):
 		url = "https://xueqiu.com/stock/f10/balsheet.json?symbol=%s&page=1&size=%d&_=%d" % (st_symbol, size, now)
 	elif REP_TYPE_CUR == report_type:
 		url = "https://xueqiu.com/v4/stock/quote.json?code=%s&_=%d" % (st_symbol, now)
+		assert_if_size_err = False
 	elif REP_TYPE_FEEDBACK == report_type:
 		url = "https://xueqiu.com/stock/f10/bonus.json?symbol=%s&page=1&size=%d&_=%d" % (st_symbol, size, now)
+		assert_if_size_err = False
 	else:
 		return None
 	request = urllib2.Request(url)
@@ -56,10 +56,19 @@ def common_read_data(st_symbol, months_from_2017, report_type):
 		return dat
 	else:
 		dat_list = dic["list"]
-		return dat_list
+		if assert_if_size_err:
+			assert size == len(dat_list)
+		des_list = []
+		for i, el in enumerate(dat_list):
+			if 0 == i or (1 == (i + 1 - months_from_2017) % 4):
+				des_list.append(el)
+		return des_list
 
 def floaty(num):
 	return float(num or 0.0)
+
+def inty(num):
+	return int(num or 0)
 
 #################################################################################
 ### 1. 主要财务指标
@@ -76,9 +85,16 @@ class MainFinData(object):
 		self.totalliab = floaty(d['totalliab']) # 负债总额
 		self.totsharequi = floaty(d['totsharequi']) # 股东权益合计
 
+		self.year = inty(self.reportdate[0:4]) # 年份
+		self.month = inty(self.reportdate[4:6]) # 月份
+
 	def __repr__(self):
-		return "[%s] 财报季度 = %s, EPS = %f, NAV = %f, 每股现金流 = %f, 每股经营性现金流 = %f, 资产总额 = %f, 负债总额 = %f, 股东权益合计 = %f" \
-		% (self.symbol, self.reportdate, self.basiceps, self.naps, self.opercashpershare, self.peropecashpershare, self.totalassets, self.totalliab, self.totsharequi)
+		s0 = "\n============================================================\n"
+		s1 = "[%s]主要财务指标 %s\n" % (self.symbol, self.reportdate)
+		s2 = "EPS = %f,\nNAV = %f,\n每股现金流 = %f,\n每股经营性现金流 = %f\n" \
+		% (self.basiceps, self.naps, self.opercashpershare, self.peropecashpershare)
+		s3 = "============================================================\n"
+		return s0 + s1 + s2 + s3
 
 #################################################################################
 ### 2. 综合损益表
@@ -102,29 +118,32 @@ class ProfitData(object):
 		self.netprofit = floaty(d['netprofit']) # 税后净利
 		self.basiceps = floaty(d['basiceps']) # EPS 基本每股收益
 
+		self.year = inty(self.enddate[0:4]) # 年份
+		self.month = inty(self.enddate[4:6]) # 月份
+
 		self.grosprofit = self.bizinco - self.bizcost # 毛利润 = 营业收入 - 营业成本
 		self.grosmargin = self.grosprofit / self.bizinco # 毛利率
 		self.oprprofitratio = self.perprofit / self.biztotinco # 营业利润率
 		self.totprofitratio = self.totprofit / self.biztotinco # 税前净利率
 		self.netprofitratio = self.netprofit / self.biztotinco # 税后净利率
-		self.rednetprofit = self.netprofit + self.noncassetsdisl # 还原税前净利
+		self.rednetprofit = self.totprofit + self.noncassetsdisl # 还原税前净利
 		self.rednetprofitratio = self.rednetprofit / self.biztotinco # 还原税前净利率
 		self.salenmangexpratio = (self.salesexpe + self.manaexpe) / self.grosprofit # 销售及一般管理费用占毛利润的比例
 		self.inteexpratio = self.inteexpe / self.grosprofit # 利息支出占毛利润的比例
 		self.deveexpratio = self.deveexpe / self.grosprofit # 研发费用占毛利润的比例
 
 	def __repr__(self):
-		s1 = "[%s] from %s to %s, 营业总收入 = %f, 营业收入 = %f, 营业总成本 = %f, 营业成本 = %f, 利息支出 = %f,\
-		研发费用 = %f, 销售费用 = %f, 管理费用 = %f, 营业利润 = %f, 非流动资产处置损失 = %f, 税前净利 = %f, 税后净利 = %f\
-		EPS 基本每股收益 = %f\n" % \
-		(self.symbol, self.begindate, self.enddate, self.biztotinco, self.bizinco, self.biztotcost, self.bizcost, self.inteexpe,\
-			self.deveexpe, self.salesexpe, self.manaexpe, self.perprofit, self.noncassetsdisl, self.totprofit, self.netprofit,\
-		 	self.basiceps)
-		s2 = "[%s] 毛利润 = %f, 毛利率 = %f, 营业利润率 = %f, 税前净利率 = %f, 税后净利率 = %f, 还原税前净利 = %f, 还原税前净利率 = %f,\
-		销售及一般管理费用占毛利润的比例 = %f, 利息支出占毛利润的比例 = %f, 研发费用占毛利润的比例 = %f" %\
-		(self.symbol, self.grosprofit, self.grosmargin, self.oprprofitratio, self.totprofitratio, self.netprofitratio, self.rednetprofit, self.rednetprofitratio,\
-			self.salenmangexpratio, self.inteexpratio, self.deveexpratio)
-		return s1 + s2
+		s0 = "\n============================================================\n"
+		s1 = "[%s]综合损益表 %s - %s\n" % (self.symbol, self.begindate, self.enddate)
+		s2 = "营业总收入 = %f, 营业总成本 = %f, 营业利润 = %f\n" % (self.biztotinco, self.biztotcost, self.perprofit)
+		s3 = "营业收入 = %f,  营业成本 = %f, 毛利润 = %f\n" % (self.bizinco, self.bizcost, self.grosprofit)
+		s4 = "利息支出 = %f, 利息支出占毛利润的比例 = %f%%\n" % (self.inteexpe, self.inteexpratio * 100)
+		s5 = "研发费用 = %f, 研发费用占毛利润的比例 = %f%%\n" % (self.deveexpe, self.deveexpratio * 100)
+		s6 = "销售费用 = %f, 管理费用 = %f, 销售及一般管理费用占毛利润的比例 = %f%%\n" % (self.salesexpe, self.manaexpe, self.salenmangexpratio * 100)
+		s7 = "还原税前净利 = %f, 非流动资产处置损失 = %f, 税前净利 = %f, 税后净利 = %f\n" % (self.rednetprofit, self.noncassetsdisl, self.totprofit, self.netprofit)
+		s8 = "毛利率 = %f%%, 营业利润率 = %f%%, 还原税前净利率 = %f%%, 税前净利率 = %f%%, 税后净利率 = %f%%\n" % (self.grosmargin * 100, self.oprprofitratio * 100, self.rednetprofitratio * 100, self.totprofitratio * 100, self.netprofitratio * 100)
+		s9 = "============================================================\n"
+		return s0 + s1 + s2 + s3 + s4 + s5 + s6 + s7 + s8 + s9
 
 #################################################################################
 ### 3. 资产负债表
@@ -146,25 +165,40 @@ class AssetsData(object):
 		self.consprog = floaty(d['consprog']) # 在建工程
 		self.duenoncliab = floaty(d['duenoncliab']) # 一年内到期的非流动负债
 
+		self.year = inty(self.reportdate[0:4]) # 年份
+		self.month = inty(self.reportdate[4:6]) # 月份
+
 		self.totsharequi = self.totasset - self.totliab # 股东权益
 		self.eq = self.totsharequi / self.totasset # Eq
 		self.curassetoftotliab = self.totcurrasset / self.totliab # 流动资产 / 总负债（企业应变危机的能力）
+		self.invtot = self.equiinve + self.inveprop + self.fixedasseimmo + self.consprog # 固定资产 + 长期投资
+		self.accrate = self.accorece / self.totasset # 应收账款占总资产的比例
+		self.invrate = self.inve / self.totasset # 存货占总资产的比例
+		# 流动资产 / 一年内到期的非流动负债（近期面对的经济压力）
+		if self.duenoncliab > 0:
+			self.curassetofduenliab = (self.totcurrasset / self.duenoncliab)
+		else:
+			self.curassetofduenliab = 0
 
 	def __repr__(self):
-		s1 = "[%s] 财报季度 = %s, 流动资产 = %f, 总资产 = %f, 流动负债 = %f, 总负债 = %f, 应收账款 = %f, 存货 = %f\
-		长期股权投资 = %f, 投资性房地产 = %f, 固定资产原值 = %f, 累计折旧 = %f, 在建工程 = %f, 一年内到期的非流动负债 = %f\n" % \
-		(self.symbol, self.reportdate, self.totcurrasset, self.totasset, self.totalcurrliab, self.totliab, self.accorece, self.inve,\
-			self.equiinve, self.inveprop, self.fixedasseimmo, self.accudepr, self.consprog, self.duenoncliab)
-		s2 = "[%s] 股东权益 = %f, Eq = %f, 流动资产 / 总负债（企业应变危机的能力） = %f" % (self.symbol, self.totsharequi, self.eq, self.curassetoftotliab)
-		return s1 + s2
+		s0 = "\n============================================================\n"
+		s1 = "[%s]资产负债表 %s\n" % (self.symbol, self.reportdate)
+		s2 = "总资产 = %f, 总负债 = %f, 股东权益 = %f, Eq = %f%%\n" % (self.totasset, self.totliab, self.totsharequi, self.eq * 100)
+		s3 = "流动资产 = %f, 流动负债 = %f, 流动资产 / 总负债（企业应变危机的能力） = %f\n" % (self.totcurrasset, self.totalcurrliab, self.curassetoftotliab)
+		s4 = "应收账款 = %f, 应收账款占总资产的比例 = %f%%\n" % (self.accorece, self.accrate * 100)
+		s5 = "存货 = %f, 存货占总资产的比例 = %f%%\n" % (self.inve, self.invrate * 100)
+		s6 = "长期股权投资 = %f(%f%%), 投资性房地产 = %f(%f%%), 固定资产原值 = %f(%f%%), 在建工程 = %f(%f%%)\n" % \
+		(self.equiinve, self.equiinve / self.totasset * 100, self.inveprop, self.inveprop / self.totasset * 100, self.fixedasseimmo, self.fixedasseimmo / self.totasset * 100, self.consprog, self.consprog / self.totasset * 100)
+		s7 = "一年内到期的非流动负债 = %f, 流动资产 / 一年内到期的非流动负债（近期面对的经济压力） = %f\n" % (self.duenoncliab, self.curassetofduenliab)
+		s8 = "============================================================\n"
+		return s0 + s1 + s2 + s3 + s4 + s5 + s6 + s7 + s8
 
 #################################################################################
 ### 4. 市场数据
 #################################################################################
 class CurMarketData(object):
 	def __init__(self, sym, d):
-		if sym is not d["symbol"]:
-			pass
+		assert sym == d["symbol"]
 		self.symbol = d["symbol"] # 股票代号
 		self.name = d['name'] # 名字
 		self.current = floaty(d['current']) # 股价
@@ -178,8 +212,13 @@ class CurMarketData(object):
 		self.pb = floaty(d['pb']) # 市净率（动）
 
 	def __repr__(self):
-		return "[%s, %s] 股价 = %f, 总股本 = %f, 流通股本 = %f, EPS = %f, NAV = %f, 每股股息 = %f, PER 动 = %f, PER 静 = %f, PB = %f" % \
-		(self.symbol, self.name, self.current, self.totalShares, self.float_shares, self.eps, self.net_assets, self.dividend, self.pe_ttm, self.pe_lyr, self.pb)
+		s0 = "\n============================================================\n"
+		s1 = "[%s, %s]市场数据\n" % (self.symbol, self.name)
+		s2 = "股价 = %f, PER 动 = %f, PER 静 = %f\n" % (self.current, self.pe_ttm, self.pe_lyr)
+		s3 = "总市值 = %f亿, 总股本 = %f, 流通股本 = %f, 流通比例 = %f%%\n" % (self.totalShares * self.current / 100000000, self.totalShares, self.float_shares, self.float_shares / self.totalShares * 100)
+		s4 = "EPS = %f, NAV = %f, 每股股息 = %f, PB = %f\n" % (self.eps, self.net_assets, self.dividend, self.pb)
+		s5 = "============================================================\n"
+		return s0 + s1 + s2 + s3 + s4 + s5
 
 #################################################################################
 ### 5. 分红送配
@@ -193,64 +232,320 @@ class FeedbackData(object):
 		self.recorddate = d['recorddate'] # 股权登记日
 
 	def __repr__(self):
-		return "[%s] 分红公告日期 = %s, 分红实施年度 = %s, 总结 = %s, 股权登记日 = %s" % (self.symbol, self.bonusimpdate, self.bonusyear, self.summarize, self.recorddate)
+		s0 = "\n============================================================\n"
+		s1 = "[%s]分红送配\n" % self.symbol
+		s2 = "分红公告日期 = %s, 分红实施年度 = %s, 股权登记日 = %s\n" % (self.bonusimpdate, self.bonusyear, self.recorddate)
+		s3 = "总结 = %s\n" % self.summarize
+		s4 = "============================================================\n"
+		return s0 + s1 + s2 + s3 + s4
+
 
 #################################################################################
 ### 6. 综合数据
 #################################################################################
-# class ComplexData(object):
-# 	def __init__(self, *main_dats, *pro_dats, *aset_dats, cur_dat, *fb_dats):
-# 		self.main_dat = main_dat
-# 		self.pro_dat = pro_dat
-# 		self.aset_dat = aset_dat
-# 		self.cur_dat = cur_dat
-# 		self.fb_dat = fb_dat
+class ComplexData(object):
+	def __init__(self, symbol, **wrap):
+		main_dats = wrap['main']
+		pro_dats = wrap['pro']
+		aset_dats = wrap['aset']
+		cur_dat = wrap['cur']
+		fb_dats = wrap['fb']
 
-# 		self.roeBefore # 税前 ROE
-# 		self.roeAfter # 税后 ROE
-# 		self.roaBefore # 税前 ROA
-# 		self.roaAfter # 税后 ROA
-# 		self.roePredict # ROE 预测
-# 		self.accudeprofgrosprofit # 折旧费用占毛利润的比例
-# 		self.profittoinv # 盈余再投资率
-# 		self.value12 # 12倍PER价值估算
-# 		self.value15 # 15倍PER价值估算
+		assert symbol is not None and \
+		main_dats is not None and len(main_dats) > 0 and \
+		pro_dats is not None and len(pro_dats) > 0 and \
+		aset_dats is not None and len(aset_dats) > 0 and \
+		cur_dat is not None and \
+		fb_dats is not None and len(fb_dats) > 0 and \
+		len(main_dats) == len(pro_dats) and \
+		len(main_dats) == len(aset_dats)
+
+		main_dlast = main_dats[-1]
+		assert main_dlast.year == 2007
+
+		self.symbol = symbol
+		self.name = cur_dat.name
+
+		main_d0 = main_dats[0]
+		accept_first = main_d0.month == 12
+		if not accept_first:
+			main_dats = main_dats[1:]
+			pro_dats = pro_dats[1:]
+			aset_dats = aset_dats[1:]
+		self.main_pro_aset_dic = {}
+		for d in main_dats:
+			k = "main_%d" % d.year
+			self.main_pro_aset_dic[k] = d
+		for d in pro_dats:
+			k = "pro_%d" % d.year
+			self.main_pro_aset_dic[k] = d
+		for d in aset_dats:
+			k = "aset_%d" % d.year
+			self.main_pro_aset_dic[k] = d
+		self.cur_dat = cur_dat
+		self.fb_dats = fb_dats
+
+		yearFrom = 2008
+		yearTo = main_dats[0].year
+		total = 0.0
+
+		self.curyear = yearTo # 综合数据记录的最近一年
+
+		# 2008 - 最近一年 的税前 ROE
+		self.roesBeforeDic = {}
+		for year in range(yearFrom, yearTo + 1):
+			kpro_this = "pro_%d" % year
+			kaset_last = "aset_%d" % (year - 1)
+			pro_this = self.main_pro_aset_dic[kpro_this]
+			aset_last = self.main_pro_aset_dic[kaset_last]
+			roe = pro_this.totprofit / aset_last.totsharequi
+			self.roesBeforeDic[year] = roe
+		# 最近一年税前 ROE
+		self.roeBeforeCur = self.roesBeforeDic[yearTo]
+		# 2008 - 最近一年 的平均税前 ROE
+		total = 0.0
+		for year in range(yearFrom, yearTo + 1):
+			roe = self.roesBeforeDic[year]
+			total = total + roe
+		self.roeBeforeAveAll = total / (yearTo - yearFrom + 1)
+		# 5年平均税前 ROE
+		total = 0.0
+		for year in range(yearTo - 4, yearTo + 1):
+			roe = self.roesBeforeDic[year]
+			total = total + roe
+		self.roeBeforeAve5 = total / 5
+		# 3年平均税前 ROE
+		total = 0.0
+		for year in range(yearTo - 2, yearTo + 1):
+			roe = self.roesBeforeDic[year]
+			total = total + roe
+		self.roeBeforeAve3 = total / 3
+
+		# 2008 - 最近一年 的税后 ROE
+		self.roesAfterDic = {}
+		for year in range(yearFrom, yearTo + 1):
+			kpro_this = "pro_%d" % year
+			kaset_last = "aset_%d" % (year - 1)
+			pro_this = self.main_pro_aset_dic[kpro_this]
+			aset_last = self.main_pro_aset_dic[kaset_last]
+			roe = pro_this.netprofit / aset_last.totsharequi
+			self.roesAfterDic[year] = roe
+		# 最近一年税后 ROE
+		self.roeAfterCur = self.roesAfterDic[yearTo]
+		# 2008 - 最近一年 的平均税后 ROE
+		total = 0.0
+		for year in range(yearFrom, yearTo + 1):
+			roe = self.roesAfterDic[year]
+			total = total + roe
+		aveAllYears = (yearTo - yearFrom + 1)
+		self.roeAfterAveAll = total / (yearTo - yearFrom + 1)
+		# 5年平均税后 ROE
+		total = 0.0
+		for year in range(yearTo - 4, yearTo + 1):
+			roe = self.roesAfterDic[year]
+			total = total + roe
+		self.roeAfterAve5 = total / 5
+		# 3年平均税后 ROE
+		total = 0.0
+		for year in range(yearTo - 2, yearTo + 1):
+			roe = self.roesAfterDic[year]
+			total = total + roe
+		self.roeAfterAve3 = total / 3
+
+		# （税后）ROE 预测
+		self.roePredict = (self.roeAfterAve3 * 3 + self.roeAfterAve5 * 5 + self.roeAfterAveAll * aveAllYears) / (3 + 5 + aveAllYears)
+		self.roePredict = min(self.roePredict, self.roeAfterAve3, self.roeAfterAve5, self.roeAfterAveAll)
+
+		# ROA
+		k1 = 'pro_%d' % yearTo
+		k2 = 'aset_%d' % (yearTo - 1)
+		self.roaBefore = self.main_pro_aset_dic[k1].totprofit / self.main_pro_aset_dic[k2].totasset # 税前 ROA
+		self.roaAfter = self.main_pro_aset_dic[k1].netprofit / self.main_pro_aset_dic[k2].totasset # 税后 ROA
+		
+		# 2008 - 最近一年 的折旧费用占毛利润的比例
+		self.acdofgrsprodic = {}
+		for year in range(yearFrom, yearTo + 1):
+			kpro = "pro_%d" % year
+			kaset = "aset_%d" % year
+			pro = self.main_pro_aset_dic[kpro]
+			aset = self.main_pro_aset_dic[kaset]
+			of = aset.accudepr / pro.grosprofit
+			self.acdofgrsprodic[year] = of
+		
+		# 盈余再投资率 2012 - 2016
+		self.profittoinvdic = {}
+		for year in range(yearFrom, yearTo + 1):
+			if year - yearFrom >= 4:
+				kpro_this = "pro_%d" % year
+				kpro_last0 = "pro_%d" % (year - 1)
+				kpro_last1 = "pro_%d" % (year - 2)
+				kpro_last2 = "pro_%d" % (year - 3)
+				pro_this = self.main_pro_aset_dic[kpro_this]
+				pro_last0 = self.main_pro_aset_dic[kpro_last0]
+				pro_last1 = self.main_pro_aset_dic[kpro_last1]
+				pro_last2 = self.main_pro_aset_dic[kpro_last2]
+
+				kaset_this = "aset_%d" % year
+				kaset_last = "aset_%d" % (year - 4)
+				aset_this = self.main_pro_aset_dic[kaset_this]
+				aset_last = self.main_pro_aset_dic[kaset_last]
+
+				to = (aset_this.invtot - aset_last.invtot) / (pro_this.netprofit + pro_last0.netprofit + pro_last1.netprofit + pro_last2.netprofit)
+				self.profittoinvdic[year] = to
+		
+		self.value12 = self.cur_dat.net_assets * self.roePredict * 12 # 12倍PER价值估算
+		self.value15 = self.cur_dat.net_assets * self.roePredict * 15 # 15倍PER价值估算
+
+		# 安全边际
+		self.margin12 = self.value12 / self.cur_dat.current - 1
+		self.margin15 = self.value15 / self.cur_dat.current - 1
+
+	def __repr__(self):
+		s0 = "\n============================================================\n"
+		s1 = "[%s, %s]综合数据\n" % (self.symbol, self.name)
+		s2 = "2008 - %d年的税前 ROE = %s\n, %d年税前 ROE = %f\n" % (self.curyear, str(self.roesBeforeDic), self.curyear, self.roeBeforeCur)
+		s3 = "2008 - %d年的平均税前 ROE = %f, 5年平均税前 ROE = %f, 3年平均税前 ROE = %f\n" % (self.curyear, self.roeBeforeAveAll, self.roeBeforeAve5, self.roeBeforeAve3)
+		s4 = "2008 - %d年的税后 ROE = %s, %d年税后 ROE = %f\n" % (self.curyear, str(self.roesAfterDic), self.curyear, self.roeAfterCur)
+		s5 = "2008 - %d年的平均税后 ROE = %f, 5年平均税后 ROE = %f, 3年平均税后 ROE = %f\n" % (self.curyear, self.roeAfterAveAll, self.roeAfterAve5, self.roeAfterAve3)
+		s6 = "（税后）ROE 预测 = %f\n" % self.roePredict
+		s7 = "税前 ROA = %f, 税后 ROA = %f\n" % (self.roaBefore, self.roaAfter)
+		s8 = "2008 - %d年的折旧费用占毛利润的比例 = %s\n" % (self.curyear, str(self.acdofgrsprodic))
+		s9 = "盈余再投资率 = %s\n" % str(self.profittoinvdic)
+		s10 = "12倍PER价值估算 = %f, 15倍PER价值估算 = %f\n" % (self.value12, self.value15)
+		s11 = "安全边际 = %f%%, %f%%\n" % (self.margin12 * 100, self.margin15 * 100)
+		s12 = "============================================================\n"
+		return s0 + s1 + s2 + s3 + s4+ s5+ s6 + s7 + s8 + s9 + s10 + s11 + s12
 
 # test
-st_symbol = 'SH600519'
+
+# st_symbol = 'SH600519'
+# st_name = '贵州茅台'
+
+# st_symbol = 'SZ000651'
+# st_name = '格力电器'
+
+# st_symbol = 'SZ000002'
+# st_name = '万科A'
+
+# st_symbol = 'SH600660'
+# st_name = '福耀玻璃'
+
+# st_symbol = 'SH600009'
+# st_name = '上海机场'
+
+# st_symbol = 'SH601006'
+# st_name = '大秦铁路'
+
+# st_symbol = 'SH600350'
+# st_name = '山东高速'
+
+# st_symbol = 'SH600340'
+# st_name = '华夏幸福'
+
+# st_symbol = 'SH600004'
+# st_name = '白云机场'
+
+# st_symbol = 'SH600886'
+# st_name = '国投电力'
+
+# st_symbol = 'SH600900'
+# st_name = '长江电力'
+
+# st_symbol = 'SZ000333'
+# st_name = '美的集团'
+
+# st_symbol = 'SH600887'
+# st_name = '伊利股份'
+
+# st_symbol = 'SZ002415'
+# st_name = '海康威视'
+
+##########
+# 汽车制造
+##########
+
+# st_symbol = 'SZ000957'; st_name = '中通客车'
+# st_symbol = 'SH600104'; st_name = '上汽集团'
+# st_symbol = 'SH600066'; st_name = '宇通客车'
+# st_symbol = 'SZ000550'; st_name = '江铃汽车'
+# st_symbol = 'SZ000550'; st_name = '江铃汽车'
+# st_symbol = 'SH600006'; st_name = '东风汽车'
+# st_symbol = 'SZ000800'; st_name = '一汽轿车'
+# st_symbol = 'SH600760'; st_name = '中航黑豹'
+# st_symbol = 'SH600166'; st_name = '福田汽车'
+# st_symbol = 'SZ000980'; st_name = '金马股份'
+# st_symbol = 'SZ000951'; st_name = '中国重汽'
+# st_symbol = 'SH600418'; st_name = '江淮汽车'
+# st_symbol = 'SZ000625'; st_name = '长安汽车'
+
+# st_symbol = 'SH601127'; st_name = '小康股份'
+# st_symbol = 'SZ002594'; st_name = '比亚迪'
+# st_symbol = 'SH601633'; st_name = '长城汽车'
+# st_symbol = 'SH601238'; st_name = '广汽集团'
+# st_symbol = 'SH600303'; st_name = '曙光股份'
+
 months = 1
 
+fname = "./%s_%s.txt" % (st_name, st_symbol)
+file = open(fname, 'w+')
+
 type = REP_TYPE_MAIN
+mainfin_list = []
 dat_list = common_read_data(st_symbol, months, type)
-dat0 = dat_list[0]
-d0 = MainFinData(st_symbol, dat0)
-print d0
+for el in dat_list:
+	d = MainFinData(st_symbol, el)
+	mainfin_list.append(d)
+print >>file, '*** 主要财务指标 ***'
+print >>file, mainfin_list
+print >>file, '\n\n'
 
 type = REP_TYPE_PROFIT
+pro_list = []
 dat_list = common_read_data(st_symbol, months, type)
-dat0 = dat_list[0]
-d0 = ProfitData(st_symbol, dat0)
-print d0
+for el in dat_list:
+	d = ProfitData(st_symbol, el)
+	pro_list.append(d)
+print >>file, '*** 综合损益表 ***'
+print >>file, pro_list
+print >>file, '\n\n'
 
 type = REP_TYPE_ASSETS
+aset_list = []
 dat_list = common_read_data(st_symbol, months, type)
-dat0 = dat_list[0]
-d0 = AssetsData(st_symbol, dat0)
-print d0
+for el in dat_list:
+	d = AssetsData(st_symbol, el)
+	aset_list.append(d)
+print >>file, '*** 资产负债表 ***'
+print >>file, aset_list
+print >>file, '\n\n'
 
 type = REP_TYPE_CUR
-dat0 = common_read_data(st_symbol, 1, type)
-d0 = CurMarketData(st_symbol, dat0)
-print d0
+el = common_read_data(st_symbol, 1, type)
+cur_dat = CurMarketData(st_symbol, el)
+print >>file, '*** 最新市场数据 ***'
+print >>file, cur_dat
+print >>file, '\n\n'
 
 type = REP_TYPE_FEEDBACK
+fb_list = []
 dat_list = common_read_data(st_symbol, months, type)
-dat0 = dat_list[0]
-d0 = FeedbackData(st_symbol, dat0)
-print d0
+for el in dat_list:
+	d = FeedbackData(st_symbol, el)
+	fb_list.append(d)
+print >>file, '*** 分红送配 ***'
+print >>file, fb_list
+print >>file, '\n\n'
 
-
-
+wrap = {}
+wrap['main'] = mainfin_list
+wrap['pro'] = pro_list
+wrap['aset'] = aset_list
+wrap['cur'] = cur_dat
+wrap['fb'] = fb_list
+com_dat = ComplexData(st_symbol, **wrap)
+print >>file, '*** 综合数据 ***'
+print >>file, com_dat
+print >>file, '\n\n'
 
 
 
