@@ -1,0 +1,467 @@
+{
+	"name" : "老板电器",
+	"list" : [
+            {
+                  "reportdate" : "20161231",
+                  "finstmtcomments" : "标准无保留意见",
+                  "acntfirm" : "中瑞岳华会计师事务",
+                  "finstmtspecials" : "公司存在房地产市场波动、原材料价格波动、市场竞争加剧等风险，详细内容见本报告第四节九(5)风险因素，敬请广大投资者注意投资风险。",
+                  "sharecount" : 730056750,
+
+                  "shorttermborrdetail" : "无",
+                  "longborrdetail" : "无",
+                  
+                  "curfds_cash" : 636814.93,
+                  "curfds_bank" : 3438203023.60,
+                  "curfds_other" : 9569473.96,
+                  "curfds_limit" : 9569473.96,
+                  
+                  "notesrece_bank" : 536933678.70,
+                  "notesrece_business" : 100595561.71,
+                  "notesrece_other" : 0.0,
+                  
+                  "accorece_credit_tot" : 351359618.93,
+                  "accorece_credit_bad" : 19764416.24,
+                  "accorece_single_tot" : 855022.49,
+                  "accorece_single_bad" : 855022.49,
+                  "accorece_single_imp_tot" : 0.0,
+                  "accorece_single_imp_bad" : 0.0,
+                  "accorece_0_1_tot" : 340120882.00,
+                  "accorece_0_1_bad" : 17006044.09,
+                  "accorece_1_2_tot" : 7107590.51,
+                  "accorece_1_2_bad" : 710759.06,
+                  "accorece_2_3_tot" : 1001972.28,
+                  "accorece_2_3_bad" : 200394.45,
+                  "accorece_3_4_tot" : 2325435.99,
+                  "accorece_3_4_bad" : 1162718.01,
+                  "accorece_4_5_tot" : 596187.58,
+                  "accorece_4_5_bad" : 476950.06,
+                  "accorece_5_n_tot" : 207550.57,
+                  "accorece_5_n_bad" : 207550.57,
+                  "accorece_bad_standard" : "单项金额重大(>=500w)并单项计提坏账准备、按信用风险组合计提坏账准备(账龄分析法)、单项金额虽不重大(<500w)但单项计提坏账准备",
+
+                  "prep_0_1" : 32828372.81,
+                  "prep_1_n" : 0.0,
+
+                  "otherrecedetail" : "按照单项金额重大并单项计提坏账准备的其他应收款、按组合计提坏账准备的其他应收款组合、单项金额虽不重大但单项计提坏账准备的其他应收款分类。本期计提坏账准备金额 428,911.53 元;本期收回或转回坏账准备金额 0 元。主要包括保证金848w、押金510w、单位往来152w、备用金91w、代扣代缴款41w等。",
+
+                  "inverevvallossstandard" : "可变现净值是指在日常活动中，存货的估计售价减去至完工时估计将要发生的成本、估计的销售费用以及相关税费后的金额。在确定存货的可变现净值时，以取得的确凿证据为基础，同时考虑持有存货的目的以及资产负债表日后事项的影响。\n在资产负债表日，存货按照成本与可变现净值孰低计量。当其可变现净值低于成本时，提取存货跌价准备。存货跌价准备按单个存货项目的成本高于其 可变现净值的差额提取。\n计提存货跌价准备后，如果以前减记存货价值的影响因素已经消失，导致存货的可变现净值高于其账面价值的，在原已计提的存货跌价准备金额内予以转回，转回的金额计入当期损益。",
+                  "inverevvallosstot" : 0.0,
+                  "inveincal" : "存货在取得时按实际成本计价，存货成本包括采购成本、加工成本和其他成本",
+                  "inveoutcal" : "领用和发出时按加权平均法计价",
+
+                  "holdinvedue_inrate" : -0.695,
+                  "holdinvedue_losscur" : 0.0,
+                  "holdinvedue_lossback" : 0.0,
+
+                  "avaisellassecur" : 27734000.00,
+                  "avaisellassecost" : 27734000.00,
+
+                  "invepropcal" : "成本模式",
+
+                  "fixedassedepolicy" : "年限平均法",
+                      "intaassetdmopolicy" : "使用寿命有限的无形资产自可供使用时起，对其原值减去预计净残值和已计提的减值准备累计金额在其预计使用寿命内采用直线法分期平均摊销。使用寿命不确定的无形资产不予摊销。",
+                  "findevexp" : 193519233.30,
+
+                  "emplyescnt" : 3719,
+                  "equfinpubpri" : 21.25,
+                  "debtfininrate" : 0.0
+            },
+            {
+                  "reportdate" : "20151231",
+                  "finstmtcomments" : "标准无保留意见",
+                  "acntfirm" : "中瑞岳华会计师事务",
+                  "finstmtspecials" : "公司存在房地产市场波动、原材料价格波动、市场竞争加剧等风险，详细内容见本报告第四节九(五)风险因素，敬请广大投资者注意投资风险。",
+                  "sharecount" : 486075000,
+
+                  "shorttermborrdetail" : "无",
+                  "longborrdetail" : "无",
+                  
+                  "curfds_cash" : 863747.99,
+                  "curfds_bank" : 2316694465.08,
+                  "curfds_other" : 5660278.99,
+                  "curfds_limit" : 5660278.99,
+                  
+                  "notesrece_bank" : 571480813.74,
+                  "notesrece_business" : 42251953.27,
+                  "notesrece_other" : 0.0,
+                  
+                  "accorece_credit_tot" : 338791344.85,
+                  "accorece_credit_bad" : 18403682.96,
+                  "accorece_single_tot" : 855022.49,
+                  "accorece_single_bad" : 855022.49,
+                  "accorece_single_imp_tot" : 0.0,
+                  "accorece_single_imp_bad" : 0.0,
+                  "accorece_0_1_tot" : 327334425.62,
+                  "accorece_0_1_bad" : 16366721.27,
+                  "accorece_1_2_tot" : 6856983.78,
+                  "accorece_1_2_bad" : 685698.38,
+                  "accorece_2_3_tot" : 3479583.97,
+                  "accorece_2_3_bad" : 695916.80,
+                  "accorece_3_4_tot" : 864845.15,
+                  "accorece_3_4_bad" : 432422.58,
+                  "accorece_4_5_tot" : 162912.01,
+                  "accorece_4_5_bad" : 130329.61,
+                  "accorece_5_n_tot" : 92594.32,
+                  "accorece_5_n_bad" : 92594.32,
+                  "accorece_bad_standard" : "单项金额重大(>=500w)并单项计提坏账准备、按信用风险组合计提坏账准备(账龄分析法)、单项金额虽不重大(<500w)但单项计提坏账准备",
+
+                  "prep_0_1" : 20355063.38,
+                  "prep_1_n" : 0.0,
+
+                  "otherrecedetail" : "按照单项金额重大并单项计提坏账准备的其他应收款、按组合计提坏账准备的其他应收款组合、单项金额虽不重大但单项计提坏账准备的其他应收款分类。本期计提坏账准备金额 32,473.22 元;本期收回或转回坏账准备金额 0 元。主要包括保证金682w、押金344w、备用金110w、代扣代缴款151w等。",
+
+                  "inverevvallossstandard" : "可变现净值是指在日常活动中，存货的估计售价减去至完工时估计将要发生的成本、估计的销售费用以及相关税费后的金额。在确定存货的可变现净值时，以取得的确凿证据为基础，同时考虑持有存货的目的以及资产负债表日后事项的影响。\n在资产负债表日，存货按照成本与可变现净值孰低计量。当其可变现净值低于成本时，提取存货跌价准备。存货跌价准备按单个存货项目的成本高于其 可变现净值的差额提取。\n计提存货跌价准备后，如果以前减记存货价值的影响因素已经消失，导致存货的可变现净值高于其账面价值的，在原已计提的存货跌价准备金额内予以转回，转回的金额计入当期损益。",
+                  "inverevvallosstot" : 0.0,
+                  "inveincal" : "存货在取得时按实际成本计价，存货成本包括采购成本、加工成本和其他成本",
+                  "inveoutcal" : "领用和发出时按加权平均法计价",
+
+                  "holdinvedue_inrate" : 0.0,
+                  "holdinvedue_losscur" : 0.0,
+                  "holdinvedue_lossback" : 0.0,
+
+                  "avaisellassecur" : 27734000.00,
+                  "avaisellassecost" : 27734000.00,
+
+                  "invepropcal" : "成本模式",
+
+                  "fixedassedepolicy" : "年限平均法",
+                      "intaassetdmopolicy" : "使用寿命有限的无形资产自可供使用时起，对其原值减去预计净残值和已计提的减值准备累计金额在其预计使用寿命内采用直线法分期平均摊销。使用寿命不确定的无形资产不予摊销。",
+                  "findevexp" : 150383708.97,
+
+                  "emplyescnt" : 3265,
+                  "equfinpubpri" : 15.16,
+                  "debtfininrate" : 0.0
+            },
+		{
+			"reportdate" : "20141231",
+                  "finstmtcomments" : "标准无保留意见",
+                  "acntfirm" : "中瑞岳华会计师事务",
+                  "finstmtspecials" : "公司存在房地产市场波动、原材料价格波动等风险，详细内容见本报告第四节七(五)风险因素，敬请广大投资者注意投资风险。",
+                  "sharecount" : 320000000.00,
+
+                  "shorttermborrdetail" : "无",
+                  "longborrdetail" : "无",
+                  
+                  "curfds_cash" : 101239.14,
+                  "curfds_bank" : 1599854738.12,
+                  "curfds_other" : 7323688.97,
+                  "curfds_limit" : 7323688.97,
+                  
+                  "notesrece_bank" : 456823638.74,
+                  "notesrece_business" : 25763018.00,
+                  "notesrece_other" : 0.0,
+                  
+                  "accorece_credit_tot" : 321125089.53,
+                  "accorece_credit_bad" : 17074266.47,
+                  "accorece_single_tot" : 0.0,
+                  "accorece_single_bad" : 0.0,
+                  "accorece_single_imp_tot" : 0.0,
+                  "accorece_single_imp_bad" : 0.0,
+                  "accorece_0_1_tot" : 311189142.31,
+                  "accorece_0_1_bad" : 15559457.12,
+                  "accorece_1_2_tot" : 7239507.96,
+                  "accorece_1_2_bad" : 723950.79,
+                  "accorece_2_3_tot" : 1993253.60,
+                  "accorece_2_3_bad" : 398650.72,
+                  "accorece_3_4_tot" : 607113.06,
+                  "accorece_3_4_bad" : 303556.53,
+                  "accorece_4_5_tot" : 37106.46,
+                  "accorece_4_5_bad" : 29685.17,
+                  "accorece_5_n_tot" : 58966.14,
+                  "accorece_5_n_bad" : 58966.14,
+                  "accorece_bad_standard" : "单项金额重大(>=500w)并单项计提坏账准备、按信用风险组合计提坏账准备(账龄分析法)、单项金额虽不重大(<500w)但单项计提坏账准备",
+
+                  "prep_0_1" : 38814824.70,
+                  "prep_1_n" : 508.00,
+
+                  "otherrecedetail" : "按照单项金额重大并单项计提坏账准备的其他应收款、按组合计提坏账准备的其他应收款组合、单项金额虽不重大但单项计提坏账准备的其他应收款分类。主要包括保证金519w、押金468w、备用金226w等。",
+
+                  "inverevvallossstandard" : "可变现净值是指在日常活动中，存货的估计售价减去至完工时估计将要发生的成本、估计的销售费用以及相关税费后的金额。在确定存货的可变现净值时，以取得的确凿证据为基础，同时考虑持有存货的目的以及资产负债表日后事项的影响。\n在资产负债表日，存货按照成本与可变现净值孰低计量。当其可变现净值低于成本时，提取存货跌价准备。存货跌价准备按单个存货项目的成本高于其 可变现净值的差额提取。\n计提存货跌价准备后，如果以前减记存货价值的影响因素已经消失，导致存货的可变现净值高于其账面价值的，在原已计提的存货跌价准备金额内予以转回，转回的金额计入当期损益。",
+      		"inverevvallosstot" : 0.0,
+      		"inveincal" : "存货在取得时按实际成本计价，存货成本包括采购成本、加工成本和其他成本",
+      		"inveoutcal" : "领用和发出时按加权平均法计价",
+
+                  "holdinvedue_inrate" : 0.0,
+                  "holdinvedue_losscur" : 0.0,
+                  "holdinvedue_lossback" : 0.0,
+
+                  "avaisellassecur" : 0.0,
+                  "avaisellassecost" : 0.0,
+
+                  "invepropcal" : "成本模式",
+
+                  "fixedassedepolicy" : "年限平均法",
+      		    "intaassetdmopolicy" : "使用寿命有限的无形资产自可供使用时起，对其原值减去预计净残值和已计提的减值准备累计金额在其预计使用寿命内采用直线法分期平均摊销。使用寿命不确定的无形资产不予摊销。",
+                  "findevexp" : 113690568.72,
+
+                  "emplyescnt" : 2985,
+                  "equfinpubpri" : 0.0,
+                  "debtfininrate" : 0.0
+		},
+		{
+			"reportdate" : "20131231",
+                  "finstmtcomments" : "标准无保留意见",
+                  "acntfirm" : "中瑞岳华会计师事务",
+                  "finstmtspecials" : "公司存在房地产市场波动、原材料价格波动等风险，详细内容见本报告第四节七(五)风险因素，敬请广大投资者注意投资风险。",
+                  "sharecount" : 256000000,
+
+                  "shorttermborrdetail" : "无",
+                  "longborrdetail" : "无",
+                  
+                  "curfds_cash" : 1150999.09,
+                  "curfds_bank" : 1274665322.73,
+                  "curfds_other" : 4503478.90,
+                  "curfds_limit" : 4503478.90,
+                  
+                  "notesrece_bank" : 329065604.79,
+                  "notesrece_business" : 48964855.00,
+                  "notesrece_other" : 0.0,
+                  
+                  "accorece_credit_tot" : 221731913.65,
+                  "accorece_credit_bad" : 11632243.22,
+                  "accorece_single_tot" : 0.0,
+                  "accorece_single_bad" : 0.0,
+                  "accorece_single_imp_tot" : 0.0,
+                  "accorece_single_imp_bad" : 0.0,
+                  "accorece_0_1_tot" : 214377366.62,
+                  "accorece_0_1_bad" : 10718583.34,
+                  "accorece_1_2_tot" : 6134033.85,
+                  "accorece_1_2_bad" : 613973.37,
+                  "accorece_2_3_tot" : 1094199.79,
+                  "accorece_2_3_bad" : 218839.96,
+                  "accorece_3_4_tot" : 67347.25,
+                  "accorece_3_4_bad" : 33673.63,
+                  "accorece_4_5_tot" : 58966.14,
+                  "accorece_4_5_bad" : 47172.92,
+                  "accorece_5_n_tot" : 0.0,
+                  "accorece_5_n_bad" : 0.0,
+                  "accorece_bad_standard" : "单项金额重大(>=500w)并单项计提坏账准备、按信用风险组合计提坏账准备(账龄分析法)、单项金额虽不重大(<500w)但单项计提坏账准备",
+
+                  "prep_0_1" : 13589167.19,
+                  "prep_1_n" : 0.0,
+
+                  "otherrecedetail" : "按照单项金额重大并单项计提坏账准备的其他应收款、按组合计提坏账准备的其他应收款组合、单项金额虽不重大但单项计提坏账准备的其他应收款分类",
+
+                  "inverevvallossstandard" : "可变现净值是指在日常活动中，存货的估计售价减去至完工时估计将要发生的成本、估计的销售费用以及相关税费后的金额。在确定存货的可变现净值时，以取得的确凿证据为基础，同时考虑持有存货的目的以及资产负债表日后事项的影响。\n在资产负债表日，存货按照成本与可变现净值孰低计量。当其可变现净值低于成本时，提取存货跌价准备。存货跌价准备按单个存货项目的成本高于其 可变现净值的差额提取。\n计提存货跌价准备后，如果以前减记存货价值的影响因素已经消失，导致存货的可变现净值高于其账面价值的，在原已计提的存货跌价准备金额内予以转回，转回的金额计入当期损益。",
+      		"inverevvallosstot" : 0.0,
+      		"inveincal" : "存货在取得时按实际成本计价，存货成本包括采购成本、加工成本和其他成本",
+      		"inveoutcal" : "领用和发出时按加权平均法计价",
+
+                  "holdinvedue_inrate" : 0.0,
+                  "holdinvedue_losscur" : 0.0,
+                  "holdinvedue_lossback" : 0.0,
+
+                  "avaisellassecur" : 0.0,
+                  "avaisellassecost" : 0.0,
+
+                  "invepropcal" : "成本模式",
+
+                  "fixedassedepolicy" : "年限平均法",
+      		    "intaassetdmopolicy" : "使用寿命有限的无形资产自可供使用时起，对其原值减去预计净残值和已计提的减值准备累计金额在其预计使用寿命内采用直线法分期平均摊销。使用寿命不确定的无形资产不予摊销。",
+                  "findevexp" : 81011222.41,
+
+                  "emplyescnt" : 2832,
+                  "equfinpubpri" : 0.0,
+                  "debtfininrate" : 0.0
+		},
+		{
+			"reportdate" : "20121231",
+                  "finstmtcomments" : "标准无保留意见",
+                  "acntfirm" : "中瑞岳华会计师事务",
+                  "finstmtspecials" : "公司存在房地产市场调控、原材料价格波动等风险，详细内容见本报告第四节七(五)风险因素，敬请广大投资者注意投资风险。",
+                  "sharecount" : 256000000,
+
+                  "shorttermborrdetail" : "无",
+                  "longborrdetail" : "无",
+                  
+                  "curfds_cash" : 403926.01,
+                  "curfds_bank" : 1116917799.22,
+                  "curfds_other" : 2438201.50,
+                  "curfds_limit" : 2438201.50,
+                  
+                  "notesrece_bank" : 248785332.41,
+                  "notesrece_business" : 66395190.50,
+                  "notesrece_other" : 0.0,
+                  
+                  "accorece_credit_tot" : 149043272.82,
+                  "accorece_credit_bad" : 7697023.81,
+                  "accorece_single_tot" : 0.0,
+                  "accorece_single_bad" : 0.0,
+                  "accorece_single_imp_tot" : 0.0,
+                  "accorece_single_imp_bad" : 0.0,
+                  "accorece_0_1_tot" : 145883342.47,
+                  "accorece_0_1_bad" : 7294167.14,
+                  "accorece_1_2_tot" : 2819590.15,
+                  "accorece_1_2_bad" : 281959.02,
+                  "accorece_2_3_tot" : 225178.17,
+                  "accorece_2_3_bad" : 45035.64,
+                  "accorece_3_4_tot" : 115162.03,
+                  "accorece_3_4_bad" : 75862.01,
+                  "accorece_4_5_tot" : 48781.70,
+                  "accorece_4_5_bad" : 39025.36,
+                  "accorece_5_n_tot" : 7292.99,
+                  "accorece_5_n_bad" : 7292.98,
+                  "accorece_bad_standard" : "单项金额重大(>=500w)并单项计提坏账准备、按信用风险组合计提坏账准备(账龄分析法)、单项金额虽不重大(<500w)但单项计提坏账准备",
+
+                  "prep_0_1" : 10708365.40,
+                  "prep_1_n" : 15690.00,
+
+                  "otherrecedetail" : "按照单项金额重大并单项计提坏账准备的其他应收款、按组合计提坏账准备的其他应收款组合、单项金额虽不重大但单项计提坏账准备的其他应收款分类",
+
+                  "inverevvallossstandard" : "可变现净值是指在日常活动中，存货的估计售价减去至完工时估计将要发生的成本、估计的销售费用以及相关税费后的金额。在确定存货的可变现净值时，以取得的确凿证据为基础，同时考虑持有存货的目的以及资产负债表日后事项的影响。\n在资产负债表日，存货按照成本与可变现净值孰低计量。当其可变现净值低于成本时，提取存货跌价准备。存货跌价准备按单个存货项目的成本高于其 可变现净值的差额提取。\n计提存货跌价准备后，如果以前减记存货价值的影响因素已经消失，导致存货的可变现净值高于其账面价值的，在原已计提的存货跌价准备金额内予以转回，转回的金额计入当期损益。",
+      		"inverevvallosstot" : 0.0,
+      		"inveincal" : "存货在取得时按实际成本计价，存货成本包括采购成本、加工成本和其他成本",
+      		"inveoutcal" : "领用和发出时按加权平均法计价",
+
+                  "holdinvedue_inrate" : 0.0,
+                  "holdinvedue_losscur" : 0.0,
+                  "holdinvedue_lossback" : 0.0,
+
+                  "avaisellassecur" : 0.0,
+                  "avaisellassecost" : 0.0,
+
+                  "invepropcal" : "成本模式",
+
+                  "fixedassedepolicy" : "年限平均法",
+      		    "intaassetdmopolicy" : "使用寿命有限的无形资产自可供使用时起，对其原值减去预计净残值和已计提的减值准备累计金额在其预计使用寿命内采用直线法分期平均摊销。使用寿命不确定的无形资产不予摊销。",
+                  "findevexp" : 55166220.33,
+
+                  "emplyescnt" : 2531,
+                  "equfinpubpri" : 0.0,
+                  "debtfininrate" : 0.0
+		},
+		{
+			"reportdate" : "20111231",
+                  "finstmtcomments" : "标准无保留意见",
+                  "acntfirm" : "中瑞岳华会计师事务",
+                  "finstmtspecials" : "无",
+                  "sharecount" : 256000000,
+
+                  "shorttermborrdetail" : "无",
+                  "longborrdetail" : "无",
+                  
+                  "curfds_cash" : 321221.87,
+                  "curfds_bank" : 1022532728.41,
+                  "curfds_other" : 27366.31,
+                  "curfds_limit" : 27366.31,
+                  
+                  "notesrece_bank" : 175080314.32,
+                  "notesrece_business" : 0.0,
+                  "notesrece_other" : 0.0,
+                  
+                  "accorece_credit_tot" : 135302987.39,
+                  "accorece_credit_bad" : 6891431.22,
+                  "accorece_single_tot" : 0.0,
+                  "accorece_single_bad" : 0.0,
+                  "accorece_single_imp_tot" : 0.0,
+                  "accorece_single_imp_bad" : 0.0,
+                  "accorece_0_1_tot" : 134085488.34,
+                  "accorece_0_1_bad" : 6704274.42,
+                  "accorece_1_2_tot" : 838786.99,
+                  "accorece_1_2_bad" : 83878.70,
+                  "accorece_2_3_tot" : 294219.37,
+                  "accorece_2_3_bad" : 58843.87,
+                  "accorece_3_4_tot" : 77199.70,
+                  "accorece_3_4_bad" : 38599.85,
+                  "accorece_4_5_tot" : 7292.99,
+                  "accorece_4_5_bad" : 5834.39,
+                  "accorece_5_n_tot" : 0.0,
+                  "accorece_5_n_bad" : 0.0,
+                  "accorece_bad_standard" : "单项金额重大(>=500w)并单项计提坏账准备、按信用风险组合计提坏账准备(账龄分析法)、单项金额虽不重大(<500w)但单项计提坏账准备",
+
+                  "prep_0_1" : 8575314.92,
+                  "prep_1_n" : 6533.07,
+
+                  "otherrecedetail" : "按照单项金额重大并单项计提坏账准备的其他应收款、按组合计提坏账准备的其他应收款组合、单项金额虽不重大但单项计提坏账准备的其他应收款分类",
+
+                  "inverevvallossstandard" : "可变现净值是指在日常活动中，存货的估计售价减去至完工时估计将要发生的成本、估计的销售费用以及相关税费后的金额。在确定存货的可变现净值时，以取得的确凿证据为基础，同时考虑持有存货的目的以及资产负债表日后事项的影响。\n在资产负债表日，存货按照成本与可变现净值孰低计量。当其可变现净值低于成本时，提取存货跌价准备。存货跌价准备按单个存货项目的成本高于其 可变现净值的差额提取。\n计提存货跌价准备后，如果以前减记存货价值的影响因素已经消失，导致存货的可变现净值高于其账面价值的，在原已计提的存货跌价准备金额内予以转回，转回的金额计入当期损益。",
+      		"inverevvallosstot" : 0.0,
+      		"inveincal" : "存货在取得时按实际成本计价，存货成本包括采购成本、加工成本和其他成本",
+      		"inveoutcal" : "领用和发出时按加权平均法计价",
+
+                  "holdinvedue_inrate" : 0.0,
+                  "holdinvedue_losscur" : 0.0,
+                  "holdinvedue_lossback" : 0.0,
+
+                  "avaisellassecur" : 0.0,
+                  "avaisellassecost" : 0.0,
+
+                  "invepropcal" : "成本模式",
+
+                  "fixedassedepolicy" : "年限平均法",
+      		    "intaassetdmopolicy" : "使用寿命有限的无形资产自可供使用时起，对其原值减去预计净残值和已计提的减值准备累计金额在其预计使用寿命内采用直线法分期平均摊销。使用寿命不确定的无形资产不予摊销。",
+                  "findevexp" : 42230257.36,
+
+                  "emplyescnt" : 2360,
+                  "equfinpubpri" : 0.0,
+                  "debtfininrate" : 0.0
+		},
+		{
+      	    "reportdate" : "20101231",
+      	    "finstmtcomments" : "标准无保留意见",
+      	    "acntfirm" : "中瑞岳华会计师事务所",
+      	    "finstmtspecials" : "无",
+      	    "sharecount" : 160000000,
+
+      	    "shorttermborrdetail" : "无",
+      	    "longborrdetail" : "无",
+      	    
+      	    "curfds_cash" : 388455.45,
+      	    "curfds_bank" : 1073817605.73,
+      	    "curfds_other" : 542366.00,
+      	    "curfds_limit" : 0.0,
+      	    
+      	    "notesrece_bank" : 124519750.60,
+      	    "notesrece_business" : 0.0,
+      	    "notesrece_other" : 0.0,
+      	    
+      	    "accorece_credit_tot" : 90318281.91,
+      	    "accorece_credit_bad" : 4576122.15,
+      	    "accorece_single_tot" : 0.0,
+      	    "accorece_single_bad" : 0.0,
+      	    "accorece_single_imp_tot" : 0.0,
+      	    "accorece_single_imp_bad" : 0.0,
+      	    "accorece_0_1_tot" : 89419352.16,
+      	    "accorece_0_1_bad" : 4470967.61,
+      	    "accorece_1_2_tot" : 768193.12,
+      	    "accorece_1_2_bad" : 76819.31,
+      	    "accorece_2_3_tot" : 123443.64,
+      	    "accorece_2_3_bad" : 24688.73,
+      	    "accorece_3_4_tot" : 7292.99,
+      	    "accorece_3_4_bad" : 3646.50,
+      	    "accorece_4_5_tot" : 0.0,
+      	    "accorece_4_5_bad" : 0.0,
+      	    "accorece_5_n_tot" : 0.0,
+      	    "accorece_5_n_bad" : 0.0,
+      	    "accorece_bad_standard" : "单项金额重大(>=500w)并单项计提坏账准备、按信用风险组合计提坏账准备(账龄分析法)、单项金额虽不重大(<500w)但单项计提坏账准备",
+
+      	    "prep_0_1" : 12583658.78,
+      	    "prep_1_n" : 83627.84,
+
+      	    "otherrecedetail" : "按照单项金额重大并单项计提坏账准备的其他应收款、按组合计提坏账准备的其他应收款组合、单项金额虽不重大但单项计提坏账准备的其他应收款分类",
+
+      	    "inverevvallossstandard" : "可变现净值是指在日常活动中，存货的估计售价减去至完工时估计将要发生的成本、估计的销售费用以及相关税费后的金额。在确定存货的可变现净值时，以取得的确凿证据为基础，同时考虑持有存货的目的以及资产负债表日后事项的影响。\n在资产负债表日，存货按照成本与可变现净值孰低计量。当其可变现净值低于成本时，提取存货跌价准备。存货跌价准备按单个存货项目的成本高于其 可变现净值的差额提取。\n计提存货跌价准备后，如果以前减记存货价值的影响因素已经消失，导致存货的可变现净值高于其账面价值的，在原已计提的存货跌价准备金额内予以转回，转回的金额计入当期损益。",
+      	    "inverevvallosstot" : 0.0,
+      	    "inveincal" : "存货在取得时按实际成本计价，存货成本包括采购成本、加工成本和其他成本",
+      	    "inveoutcal" : "领用和发出时按加权平均法计价",
+
+      	    "holdinvedue_inrate" : 0.0,
+      	    "holdinvedue_losscur" : 0.0,
+      	    "holdinvedue_lossback" : 0.0,
+
+      	    "avaisellassecur" : 0.0,
+      	    "avaisellassecost" : 0.0,
+
+      	    "invepropcal" : "成本模式",
+
+      	    "fixedassedepolicy" : "年限平均法",
+      	    "intaassetdmopolicy" : "使用寿命有限的无形资产自可供使用时起，对其原值减去预计净残值和已计提的减值准备累计金额在其预计使用寿命内采用直线法分期平均摊销。使用寿命不确定的无形资产不予摊销。",
+      	    "findevexp" : 33649845.81,
+
+      	    "emplyescnt" : 2441,
+      	    "equfinpubpri" : 24.0,
+      	    "debtfininrate" : 0.0
+		}
+	]
+}

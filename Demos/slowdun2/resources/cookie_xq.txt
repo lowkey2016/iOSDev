@@ -1,0 +1,10 @@
+# Netscape HTTP Cookie File
+# http://curl.haxx.se/rfc/cookie_spec.html
+# This is a generated file!  Do not edit.
+
+.xueqiu.com	TRUE	/	FALSE	1538020039	s	ft11c2foyy
+.xueqiu.com	TRUE	/	FALSE		xq_a_token	ed965d6ca0f68aa2f0b4a80a510e86fe5c02784d
+.xueqiu.com	TRUE	/	FALSE		xq_a_token.sig	4h-a7hDw5OAWxQatJglpF46pYf4
+.xueqiu.com	TRUE	/	FALSE		xq_r_token	fdcc8cfbe737cc4ba5146adb235fd757dc4acc3f
+.xueqiu.com	TRUE	/	FALSE		xq_r_token.sig	ZE73n9TV1mAyquMYb7qty1JIO_4
+xueqiu.com	FALSE	/	FALSE		aliyungf_tc	AQAAAAE8sCjmpAYAmuX4OiSDL0oXaC9j

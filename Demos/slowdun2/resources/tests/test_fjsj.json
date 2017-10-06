@@ -1,0 +1,70 @@
+{
+    "list" : [
+        {
+            "reportdate" : "",
+            "finstmtcomments" : "",
+            "acntfirm" : "",
+            "finstmtspecials" : "",
+            "sharecount" : 0.0,
+
+            "shorttermborrdetail" : "",
+            "longborrdetail" : "",
+            
+            "curfds_cash" : 0.0,
+            "curfds_bank" : 0.0,
+            "curfds_other" : 0.0,
+            "curfds_limit" : 0.0,
+            
+            "notesrece_bank" : 0.0,
+            "notesrece_business" : 0.0,
+            "notesrece_other" : 0.0,
+            
+            "accorece_credit_tot" : 0.0,
+            "accorece_credit_bad" : 0.0,
+            "accorece_single_tot" : 0.0,
+            "accorece_single_bad" : 0.0,
+            "accorece_single_imp_tot" : 0.0,
+            "accorece_single_imp_bad" : 0.0,
+            "accorece_0_1_tot" : 0.0,
+            "accorece_0_1_bad" : 0.0,
+            "accorece_1_2_tot" : 0.0,
+            "accorece_1_2_bad" : 0.0,
+            "accorece_2_3_tot" : 0.0,
+            "accorece_2_3_bad" : 0.0,
+            "accorece_3_4_tot" : 0.0,
+            "accorece_3_4_bad" : 0.0,
+            "accorece_4_5_tot" : 0.0,
+            "accorece_4_5_bad" : 0.0,
+            "accorece_5_n_tot" : 0.0,
+            "accorece_5_n_bad" : 0.0,
+            "accorece_bad_standard" : "",
+
+            "prep_0_1" : 0.0,
+            "prep_1_n" : 0.0,
+
+            "otherrecedetail" : "",
+
+            "inverevvallossstandard" : "",
+            "inverevvallosstot" : 0.0,
+            "inveincal" : "",
+            "inveoutcal" : "",
+
+            "holdinvedue_inrate" : 0.0,
+            "holdinvedue_losscur" : 0.0,
+            "holdinvedue_lossback" : 0.0,
+
+            "avaisellassecur" : 0.0,
+            "avaisellassecost" : 0.0,
+
+            "invepropcal" : "",
+
+            "fixedassedepolicy" : "",
+            "intaassetdmopolicy" : "",
+            "findevexp" : 0.0,
+
+            "emplyescnt" : 0.0,
+            "equfinpubpri" : 0.0,
+            "debtfininrate" : 0.0
+        }
+    ]
+}
