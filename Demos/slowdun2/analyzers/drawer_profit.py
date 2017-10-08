@@ -4,6 +4,7 @@ from models.gslrb import GSLRB
 from models.fjsj import FJSJ
 from models.stock import Stock
 from utils.util_res import ResUtil
+from utils.util_math import MathUtil
 import utils.util_cons as Cons
 
 class ProfitDrawer(object):
@@ -65,6 +66,16 @@ class ProfitDrawer(object):
 				val = (lb_cur.bizinco / lb_lst.bizinco - 1) * 100
 			html_str += '\t<td>%.2f%%</td>\n\t<td></td>\n' % (val)
 		html_str += '<td>(本年/去年 - 1) * 100%</td></tr>\n'
+
+		# 营业收入复合年增长率
+		html_str += '<tr bgcolor="white">\n\t<td>复合年增长率</td>\n\t<td></td>\n'
+		for k in keys:
+			k1 = keys[-1]
+			lb_lst = self.stock.gslrbs[k1]
+			lb_cur = self.stock.gslrbs[k]
+			val = MathUtil.comprateper(lb_cur.bizinco / lb_lst.bizinco, int(k) - int(k1))
+			html_str += '\t<td>%.2f%%</td>\n\t<td></td>\n' % (val)
+		html_str += '<td>以最初的年份为基数</td></tr>\n'
 
 		# 利息收入
 		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">利息收入</td>\n\t<td style="background: %s; color: #FFFFFF">+</td>\n' % (Cons.COLOR_GREEN, Cons.COLOR_GREEN)
@@ -495,6 +506,16 @@ class ProfitDrawer(object):
 			html_str += '\t<td>%.2f%%</td>\n\t<td></td>\n' % (val)
 		html_str += '<td>(本年/去年 - 1) * 100%</td></tr>\n'
 
+		# 营业利润复合年增长率
+		html_str += '<tr bgcolor="white">\n\t<td>复合年增长率</td>\n\t<td></td>\n'
+		for k in keys:
+			k1 = keys[-1]
+			lb_lst = self.stock.gslrbs[k1]
+			lb_cur = self.stock.gslrbs[k]
+			val = MathUtil.comprateper(lb_cur.perprofit / lb_lst.perprofit, int(k) - int(k1))
+			html_str += '\t<td>%.2f%%</td>\n\t<td></td>\n' % (val)
+		html_str += '<td>以最初的年份为基数</td></tr>\n'
+
 		# 营业外收入
 		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">营业外收入</td>\n\t<td style="background: %s; color: #FFFFFF">+</td>\n' % (Cons.COLOR_GREEN, Cons.COLOR_GREEN)
 		for k in keys:
@@ -516,6 +537,14 @@ class ProfitDrawer(object):
 			else:
 				val = 0.0
 			lb.nonoexpe = val
+			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, val / lb.perprofit * 100)
+		html_str += '</tr>\n'
+
+		# 营业外收支净额
+		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">营业外收支净额</td>\n\t<td style="background: %s; color: #FFFFFF">-</td>\n' % (Cons.COLOR_PURPLE, Cons.COLOR_PURPLE)
+		for k in keys:
+			lb = self.stock.gslrbs[k]
+			val = lb.nonoreve - lb.nonoexpe
 			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, val / lb.perprofit * 100)
 		html_str += '</tr>\n'
 
@@ -599,7 +628,11 @@ class ProfitDrawer(object):
 			lb = self.stock.gslrbs[k]
 			xb = self.stock.xjllbs[k]
 			val = xb.mananetr / lb.netprofit
-			html_str += '\t<td>%.2f</td>\n\t<td></td>\n' % (val)
+			if val >= 1:
+				color = Cons.COLOR_GREEN
+			else:
+				color = Cons.COLOR_RED
+			html_str += '\t<td style="background: %s; color: #FFFFFF">%.2f</td>\n\t<td></td>\n' % (color, val)
 		html_str += '</tr>\n'
 
 		# 六、每股收益部分

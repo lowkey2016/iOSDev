@@ -75,3 +75,11 @@ class ZCFZB(object):
 
     def __init__(self, **entries):
         self.__dict__.update(entries)
+        for k in self.__dict__.keys():
+            if self.__dict__[k] is None:
+                if k == 'reportdate':
+                    self.__dict__[k] = ''
+                else:
+                    self.__dict__[k] = 0.0
+                    
+        self.rectot = self.notesrece + self.accorece + self.interece + self.dividrece + self.otherrece + self.longrece

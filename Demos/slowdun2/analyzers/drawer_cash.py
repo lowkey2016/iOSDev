@@ -55,7 +55,11 @@ class CashDrawer(object):
 			gb = self.stock.gslrbs[k]
 			xb = self.stock.xjllbs[k]
 			val = xb.laborgetcash / gb.bizinco
-			html_str += '\t<td>%.2f</td>\n\t<td></td>\n' % (val)
+			if val >= 1:
+				color = Cons.COLOR_GREEN
+			else:
+				color = Cons.COLOR_RED
+			html_str += '\t<td style="background: %s; color: #FFFFFF">%.2f</td>\n\t<td></td>\n' % (color, val)
 		html_str += '</tr>\n'
 
 		# 收到的其他与经营活动有关的现金
@@ -511,7 +515,7 @@ class CashDrawer(object):
 		html_str += '</tr>\n'
 
 		# 权益性筹资的发行价
-		html_str += '<tr bgcolor="white">\n\t<td>权益性筹资的发行价</td>\n\t<td>筹资活动</td>\n'
+		html_str += '<tr bgcolor="white">\n\t<td>权益性筹资的发行价</td>\n\t<td></td>\n'
 		for k in keys:
 			if not k in self.stock.fjsjs:
 				fj = FJSJ()
@@ -527,7 +531,7 @@ class CashDrawer(object):
 		html_str += '</tr>\n'
 
 		# 债务性筹资的利率
-		html_str += '<tr bgcolor="white">\n\t<td>债务性筹资的利率</td>\n\t<td>筹资活动</td>\n'
+		html_str += '<tr bgcolor="white">\n\t<td>债务性筹资的利率</td>\n\t<td></td>\n'
 		for k in keys:
 			if not k in self.stock.fjsjs:
 				fj = FJSJ()
@@ -565,7 +569,12 @@ class CashDrawer(object):
 			else:
 				val = 0.0
 			xb.cashnetr = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
+
+			if val >= 1:
+				color = Cons.COLOR_GREEN
+			else:
+				color = Cons.COLOR_RED
+			html_str += '\t<td style="background: %s; color: #FFFFFF">%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (color, val / Cons.Yi, 0)
 		html_str += '</tr>\n'
 
 		# 期初现金及现金等价物余额

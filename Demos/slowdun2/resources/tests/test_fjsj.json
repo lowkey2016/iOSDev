@@ -48,6 +48,10 @@
             "inverevvallosstot" : 0.0,
             "inveincal" : "",
             "inveoutcal" : "",
+            "inve_prod" : 0.0,
+            "inve_sale" : 0.0,
+            "inve_save" : 0.0,
+            "inve_unit" : "",
 
             "holdinvedue_inrate" : 0.0,
             "holdinvedue_losscur" : 0.0,

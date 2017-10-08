@@ -50,6 +50,10 @@ class FJSJ(object):
     inverevvallosstot = 0.0 # 存货跌价计提总额
     inveincal = "" # 存货的成本计价方法
     inveoutcal = "" # 存货的发出计价方法
+    inve_prod = 0.0 # 存货产量
+    inve_sale = 0.0 # 存货销量
+    inve_save = 0.0 # 存货存量
+    inve_unit = 0.0 # 产销存单位
 
     holdinvedue_inrate = 0.0 # 持有至到期投资的实际利率，百分数
     holdinvedue_losscur = 0.0 # 持有至到期投资的减值数额
@@ -76,3 +80,16 @@ class FJSJ(object):
 
     def __init__(self, **entries):
         self.__dict__.update(entries)
+        for k in self.__dict__.keys():
+            if self.__dict__[k] is None:
+                str_keys = ['name', 'reportdate', 'finstmtcomments', 'acntfirm', 'finstmtspecials', 'shorttermborrdetail', 'longborrdetail', 'accorece_bad_standard', 'otherrecedetail', 'inverevvallossstandard', 'inveincal', 'inveoutcal', 'invepropcal', 'fixedassedepolicy', 'intaassetdmopolicy']
+                if k in str_keys:
+                    self.__dict__[k] = ''
+                else:
+                    self.__dict__[k] = 0.0
+
+        # 应收账款坏账计提总额
+        self.accorece_bad_tot = self.accorece_credit_bad + self.accorece_single_bad + self.accorece_single_imp_bad
+
+        # 产量和存量之和
+        self.inve_prodandsave = self.inve_prod + self.inve_save

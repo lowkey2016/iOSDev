@@ -332,7 +332,7 @@ class CashInDrawer(object):
 		html_str += '</tr>\n'
 
 		# 其他
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">其他</td>\n\t<td style="background: %s; color: #FFFFFF">-</td>\n' % (Cons.COLOR_RED, Cons.COLOR_RED)
+		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">其他</td>\n\t<td style="background: %s; color: #FFFFFF">+</td>\n' % (Cons.COLOR_GREEN, Cons.COLOR_GREEN)
 		for k in keys:
 			xb = self.stock.xjllbs[k]
 			if xb.other:

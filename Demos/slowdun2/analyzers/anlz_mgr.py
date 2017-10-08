@@ -14,6 +14,7 @@ from drawer_profit import ProfitDrawer
 from drawer_cash import CashDrawer
 from drawer_cash_in import CashInDrawer
 from drawer_fjsj import FJSJDrawer
+from drawer_group import GroupDrawer
 
 class AnlzMgr(object):
 	def __init__(self, stock):
@@ -49,30 +50,43 @@ class AnlzMgr(object):
 
 	@classmethod
 	def draw_jiadian_chudians(self):
-		stk = Stock(symbol='SZ002032', name='苏泊尔', year_from = 2007)
-		anlz_mgr = AnlzMgr(stock=stk)
-		anlz_mgr.draw()
+		group = []
 
-		stk = Stock(symbol='SZ002035', name='华帝股份', year_from = 2007)
+		stk = Stock(symbol='SZ002032', name='苏泊尔', year_from = 2010)
 		anlz_mgr = AnlzMgr(stock=stk)
 		anlz_mgr.draw()
+		group.append(stk)
 
-		stk = Stock(symbol='SZ002242', name='九阳股份')
+		stk = Stock(symbol='SZ002035', name='华帝股份', year_from = 2010)
 		anlz_mgr = AnlzMgr(stock=stk)
 		anlz_mgr.draw()
+		group.append(stk)
 
-		stk = Stock(symbol='SZ002403', name='爱仕达')
+		stk = Stock(symbol='SZ002242', name='九阳股份', year_from = 2010)
 		anlz_mgr = AnlzMgr(stock=stk)
 		anlz_mgr.draw()
+		group.append(stk)
 
-		stk = Stock(symbol='SZ002508', name='老板电器')
+		stk = Stock(symbol='SZ002403', name='爱仕达', year_from = 2010)
 		anlz_mgr = AnlzMgr(stock=stk)
 		anlz_mgr.draw()
+		group.append(stk)
 
-		stk = Stock(symbol='SZ002543', name='万和电气')
+		stk = Stock(symbol='SZ002508', name='老板电器', year_from = 2010)
 		anlz_mgr = AnlzMgr(stock=stk)
 		anlz_mgr.draw()
+		group.append(stk)
+		target = stk
 
-		stk = Stock(symbol='SZ002677', name='浙江美大')
+		stk = Stock(symbol='SZ002543', name='万和电气', year_from = 2010)
 		anlz_mgr = AnlzMgr(stock=stk)
 		anlz_mgr.draw()
+		group.append(stk)
+
+		stk = Stock(symbol='SZ002677', name='浙江美大', year_from = 2010)
+		anlz_mgr = AnlzMgr(stock=stk)
+		anlz_mgr.draw()
+		group.append(stk)
+
+		gdrawer = GroupDrawer(stocks_group=group, target=target)
+		gdrawer.draw()

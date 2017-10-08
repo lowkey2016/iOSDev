@@ -4,6 +4,8 @@ from models.zcfzb import ZCFZB
 from models.fjsj import FJSJ
 from models.stock import Stock
 from utils.util_res import ResUtil
+from utils.util_math import MathUtil
+from utils.util_stock import StockUtil
 import utils.util_cons as Cons
 
 class AssetsDrawer(object):
@@ -58,12 +60,22 @@ class AssetsDrawer(object):
 				zb_lst = ZCFZB()
 			zb_cur = self.stock.zcfzbs[k]
 
-			if zb_lst.accorece == 0:
+			if zb_lst.curfds == 0:
 				val = 0.0
 			else:
 				val = (zb_cur.curfds / zb_lst.curfds - 1) * 100
 			html_str += '\t<td>%.2f%%</td>\n\t<td></td>\n' % (val)
 		html_str += '<td>(本年/去年 - 1) * 100%</td></tr>\n'
+
+		# 货币资金复合年增长率
+		html_str += '<tr bgcolor="white">\n\t<td>复合年增长率</td>\n\t<td>货币资金</td>\n'
+		for k in keys:
+			k1 = keys[-1]
+			zb_lst = self.stock.zcfzbs[k1]
+			zb_cur = self.stock.zcfzbs[k]
+			val = MathUtil.comprateper(zb_cur.curfds / zb_lst.curfds, int(k) - int(k1))
+			html_str += '\t<td>%.2f%%</td>\n\t<td></td>\n' % (val)
+		html_str += '<td>以最初的年份为基数</td></tr>\n'		
 
 		# 货币资金中的库存现金
 		html_str += '<tr>\n\t<td bgcolor="white">其中：库存现金</td>\n\t<td></td>\n'
@@ -908,6 +920,66 @@ class AssetsDrawer(object):
 			html_str += '\t<td>%s</td>\n\t<td></td>\n' % (val)
 		html_str += '</tr>\n'
 
+		# 存货产量
+		html_str += '<tr bgcolor="white">\n\t<td>其中：产量</td>\n\t<td>经营相关资产</td>\n'
+		for k in keys:
+			fj_lst = StockUtil.getLastFJSJ(self.stock, k)
+			fj_cur = StockUtil.getCurFJSJ(self.stock, k)
+			val = fj_cur.inve_prod
+			unit = fj_cur.inve_unit
+			growval = StockUtil.getGrowVal(fj_cur.inve_prod, fj_lst.inve_prod)
+			rate = StockUtil.getGrowRate(fj_cur.inve_prod, fj_lst.inve_prod)
+			html_str += '\t<td>%.2f%s</td>\n\t<td>+%.2f%s %.2f%%</td>\n' % (val, unit, growval, unit, rate)
+		html_str += '<td>后面的是增长数和同比增长率</td></tr>\n'
+
+		# 存货销量
+		html_str += '<tr bgcolor="white">\n\t<td>其中：销量</td>\n\t<td>经营相关资产</td>\n'
+		for k in keys:
+			fj_lst = StockUtil.getLastFJSJ(self.stock, k)
+			fj_cur = StockUtil.getCurFJSJ(self.stock, k)
+			val = fj_cur.inve_sale
+			unit = fj_cur.inve_unit
+			growval = StockUtil.getGrowVal(fj_cur.inve_sale, fj_lst.inve_sale)
+			rate = StockUtil.getGrowRate(fj_cur.inve_sale, fj_lst.inve_sale)
+			html_str += '\t<td>%.2f%s</td>\n\t<td>+%.2f%s %.2f%%</td>\n' % (val, unit, growval, unit, rate)
+		html_str += '<td>后面的是增长数和同比增长率</td></tr>\n'
+
+		# 销产比
+		html_str += '<tr bgcolor="white">\n\t<td>销产比</td>\n\t<td>经营相关资产</td>\n'
+		for k in keys:
+			fj_lst = StockUtil.getLastFJSJ(self.stock, k)
+			fj_cur = StockUtil.getCurFJSJ(self.stock, k)
+			if fj_cur.inve_prod == 0:
+				val = 0
+			else:
+				val = float(fj_cur.inve_sale) / (fj_cur.inve_prod) * 100
+			html_str += '\t<td>%.2f%%</td>\n\t<td></td>\n' % val
+		html_str += '<td>销量 / 产量</td></tr>\n'
+
+		# 销产存比
+		html_str += '<tr bgcolor="white">\n\t<td>销产存比</td>\n\t<td>经营相关资产</td>\n'
+		for k in keys:
+			fj_lst = StockUtil.getLastFJSJ(self.stock, k)
+			fj_cur = StockUtil.getCurFJSJ(self.stock, k)
+			if fj_cur.inve_prod == 0:
+				val = 0
+			else:
+				val = float(fj_cur.inve_sale) / (fj_cur.inve_prod + fj_cur.inve_save) * 100
+			html_str += '\t<td>%.2f%%</td>\n\t<td></td>\n' % val
+		html_str += '<td>销量 / (产量 + 存量)</td></tr>\n'
+
+		# 存货存量
+		html_str += '<tr bgcolor="white">\n\t<td>其中：存量</td>\n\t<td>经营相关资产</td>\n'
+		for k in keys:
+			fj_lst = StockUtil.getLastFJSJ(self.stock, k)
+			fj_cur = StockUtil.getCurFJSJ(self.stock, k)
+			val = fj_cur.inve_save
+			unit = fj_cur.inve_unit
+			growval = StockUtil.getGrowVal(fj_cur.inve_save, fj_lst.inve_save)
+			rate = StockUtil.getGrowRate(fj_cur.inve_save, fj_lst.inve_save)
+			html_str += '\t<td>%.2f%s</td>\n\t<td>+%.2f%s %.2f%%</td>\n' % (val, unit, growval, unit, rate)
+		html_str += '<td>后面的是增长数和同比增长率</td></tr>\n'
+
 		# 应收款合计
 		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">应收款合计</td>\n\t<td></td>\n' % Cons.COLOR_RED
 		for k in keys:
@@ -925,6 +997,41 @@ class AssetsDrawer(object):
 			ave = val / lb.bizinco * 12
 			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%% =%.2f个月营业收入</td>\n' % (val / Cons.Yi, val / zb.totasset * 100, ave)
 		html_str += '</tr>\n'
+
+		# 应收款同比年增长率
+		html_str += '<tr bgcolor="white">\n\t<td>同比年增长率</td>\n\t<td></td>\n'
+		for k in keys:
+			k1 = '%s' % (int(k) - 1)
+			if k1 in self.stock.zcfzbs:
+				zb_lst = self.stock.zcfzbs[k1]
+			else:
+				zb_lst = ZCFZB()
+			zb_cur = self.stock.zcfzbs[k]
+
+			val0 = 0.0
+			val0 += zb_lst.notesrece
+			val0 += zb_lst.accorece
+			val0 += zb_lst.interece
+			val0 += zb_lst.dividrece
+			val0 += zb_lst.otherrece
+			val0 += zb_lst.longrece
+			rectot0 = val0
+
+			val1 = 0.0
+			val1 += zb_cur.notesrece
+			val1 += zb_cur.accorece
+			val1 += zb_cur.interece
+			val1 += zb_cur.dividrece
+			val1 += zb_cur.otherrece
+			val1 += zb_cur.longrece
+			rectot1 = val1
+
+			if rectot0 == 0:
+				val = 0.0
+			else:
+				val = (rectot1 / rectot0 - 1) * 100
+			html_str += '\t<td>%.2f%%</td>\n\t<td></td>\n' % (val)
+		html_str += '<td>(本年/去年 - 1) * 100%</td></tr>\n'
 
 		# 合计
 		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">经营相关资产合计</td>\n\t<td></td>\n' % Cons.COLOR_RED
@@ -1502,6 +1609,16 @@ class AssetsDrawer(object):
 			html_str += '\t<td>%.2f%%</td>\n\t<td></td>\n' % (val)
 		html_str += '<td>(本年/去年 - 1) * 100%</td></tr>\n'
 
+		# 总资产复合年增长率
+		html_str += '<tr bgcolor="white">\n\t<td>总资产复合年增长率</td>\n\t<td></td>\n'
+		for k in keys:
+			k1 = keys[-1]
+			zb_lst = self.stock.zcfzbs[k1]
+			zb_cur = self.stock.zcfzbs[k]
+			val = MathUtil.comprateper(zb_cur.totasset / zb_lst.totasset, int(k) - int(k1))
+			html_str += '\t<td>%.2f%%</td>\n\t<td></td>\n' % (val)
+		html_str += '<td>以最初的年份为基数</td></tr>\n'
+
 		# 总资产周转率 = 营业收入 / 平均总资产，判断是否沃尔玛模式的关键指标
 		html_str += '<tr bgcolor="white">\n\t<td>总资产周转率</td>\n\t<td></td>\n'
 		for k in keys:
@@ -1577,6 +1694,16 @@ class AssetsDrawer(object):
 				val = (zb_cur.righaggr / zb_lst.righaggr - 1) * 100
 			html_str += '\t<td>%.2f%%</td>\n\t<td></td>\n' % (val)
 		html_str += '<td>(本年/去年 - 1) * 100%</td></tr>\n'
+
+		# 净资产复合年增长率
+		html_str += '<tr bgcolor="white">\n\t<td>净资产复合年增长率</td>\n\t<td></td>\n'
+		for k in keys:
+			k1 = keys[-1]
+			zb_lst = self.stock.zcfzbs[k1]
+			zb_cur = self.stock.zcfzbs[k]
+			val = MathUtil.comprateper(zb_cur.righaggr / zb_lst.righaggr, int(k) - int(k1))
+			html_str += '\t<td>%.2f%%</td>\n\t<td></td>\n' % (val)
+		html_str += '<td>以最初的年份为基数</td></tr>\n'
 
 		# 流动比率 = 流动资产 / 流动负债
 		html_str += '<tr bgcolor="white">\n\t<td>流动比率</td>\n\t<td></td>\n'

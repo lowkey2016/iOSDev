@@ -514,8 +514,8 @@ class LiabsDrawer(object):
 			if borr == 0:
 				rate = 0
 			else:	
-				rate = (zb.curfds - fj.curfds_limit) / borr * 100
-			html_str += '\t<td>%.2f%%</td>\n' % rate
+				rate = (zb.curfds - fj.curfds_limit) / borr
+			html_str += '\t<td>%.2f</td>\n' % rate
 		html_str += '<td>现金及现金等价物余额 / 有息负债</td></tr>\n'
 		
 		# 表尾

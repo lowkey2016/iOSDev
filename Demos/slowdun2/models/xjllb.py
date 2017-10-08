@@ -92,3 +92,9 @@ class XJLLB(object):
 
     def __init__(self, **entries):
         self.__dict__.update(entries)
+        for k in self.__dict__.keys():
+            if self.__dict__[k] is None:
+                if k == 'begindate' or k == 'enddate':
+                    self.__dict__[k] = ''
+                else:
+                    self.__dict__[k] = 0.0
