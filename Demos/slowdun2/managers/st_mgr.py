@@ -50,11 +50,14 @@ class StMgr(object):
 			json.dump(json_data, outfile)
 		print content
 
+	def fetch_fangdichan_ppp_data_from_network(self):
+		self.fetch_data_from_network('SH600340') # 华夏幸福
+
 	def fetch_jiadian_chudian_data_from_network(self):
-		st_mgr.fetch_data_from_network('SZ002508') # 老板电器
-		st_mgr.fetch_data_from_network('SZ002035') # 华帝股份
-		st_mgr.fetch_data_from_network('SZ002543') # 万和电气
-		st_mgr.fetch_data_from_network('SZ002032') # 苏泊尔
-		st_mgr.fetch_data_from_network('SZ002242') # 九阳股份
-		st_mgr.fetch_data_from_network('SZ002677') # 浙江美大
-		st_mgr.fetch_data_from_network('SZ002403') # 爱仕达
+		self.fetch_data_from_network('SZ002508') # 老板电器
+		self.fetch_data_from_network('SZ002035') # 华帝股份
+		self.fetch_data_from_network('SZ002543') # 万和电气
+		self.fetch_data_from_network('SZ002032') # 苏泊尔
+		self.fetch_data_from_network('SZ002242') # 九阳股份
+		self.fetch_data_from_network('SZ002677') # 浙江美大
+		self.fetch_data_from_network('SZ002403') # 爱仕达

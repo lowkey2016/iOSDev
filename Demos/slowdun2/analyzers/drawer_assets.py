@@ -1543,7 +1543,12 @@ class AssetsDrawer(object):
 		for k in keys:
 			lb = self.stock.gslrbs[k]
 			val = prodasset[k]
-			html_str += '\t<td>%.2f%%</td>\n\t<td></td>\n' % (lb.totprofit / val * 100)
+			rate = lb.totprofit / val * 100
+			if rate < 12:
+				color = Cons.COLOR_RED
+			else:
+				color = Cons.COLOR_GREEN
+			html_str += '\t<td style="background: %s; color: #FFFFFF">%.2f%%</td>\n\t<td></td>\n' % (color, rate)
 		html_str += '</tr>\n'
 
 		# 其他流动资产
@@ -1758,6 +1763,6 @@ class AssetsDrawer(object):
 		# 表尾
 		html_str += '</table>\n\n</body>\n</html>'
 
-		print html_str
+		# print html_str
 		fname = 'db/%s_%s/资产负债表资产部分.html' % (self.stock.symbol, self.stock.name)
 		ResUtil.save_html_content(html_str, fname)

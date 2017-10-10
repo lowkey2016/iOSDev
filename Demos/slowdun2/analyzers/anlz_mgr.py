@@ -90,3 +90,12 @@ class AnlzMgr(object):
 
 		gdrawer = GroupDrawer(stocks_group=group, target=target)
 		gdrawer.draw()
+
+	@classmethod
+	def draw_fangdichan_ppp(self):
+		group = []
+		
+		stk = Stock(symbol='SH600340', name='华夏幸福', year_from = 2011)
+		anlz_mgr = AnlzMgr(stock=stk)
+		anlz_mgr.draw()
+		group.append(stk)

@@ -521,6 +521,6 @@ class LiabsDrawer(object):
 		# 表尾
 		html_str += '</tbody></table>\n\n</body>\n</html>'
 
-		print html_str
+		# print html_str
 		fname = 'db/%s_%s/资产负债表负债部分.html' % (self.stock.symbol, self.stock.name)
 		ResUtil.save_html_content(html_str, fname)

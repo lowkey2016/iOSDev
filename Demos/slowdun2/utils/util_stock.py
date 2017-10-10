@@ -24,6 +24,9 @@ class StockUtil(object):
 			fj_cur = FJSJ()
 		return fj_cur
 
+
+	## 求单个数值的方法
+
 	@classmethod
 	def getDivideVal(self, num, den, use_percent_format=False):
 		if den == 0:
@@ -137,6 +140,52 @@ class StockUtil(object):
 			return ''
 
 	@classmethod
+	def get_weighted_dividedval(self, stock, numforms, numprop, denforms, denprop, year):
+		numkeypath = '%s[%s].%s' % (numforms, year, numprop)
+		numval = self.numValueForKeyPath(stock=stock, keypath=numkeypath)
+
+		den1keypath = '%s[%s].%s' % (denforms, year, denprop)
+		den1val = self.numValueForKeyPath(stock=stock, keypath=den1keypath)
+
+		den0keypath = '%s[%d].%s' % (denforms, int(year) - 1, denprop)
+		den0val = self.numValueForKeyPath(stock=stock, keypath=den0keypath)
+		if int(den0val) == 0:
+			denval = den1val
+		else:
+			denval = (den1val + den0val) / 2
+
+		if denval == 0:
+			return 0.0
+		else:
+			return numval / denval
+
+	@classmethod
+	def get_thisdividedlast(self, stock, numforms, numprop, denforms, denprop, year):
+		numkeypath = '%s[%s].%s' % (numforms, year, numprop)
+		numval = self.numValueForKeyPath(stock=stock, keypath=numkeypath)
+
+		denkeypath = '%s[%d].%s' % (denforms, int(year) - 1, denprop)
+		denval = self.numValueForKeyPath(stock=stock, keypath=denkeypath)
+
+		if denval == 0:
+			return 0
+		else:
+			return numval / denval
+
+
+	## 求行业均值的方法
+
+	@classmethod
+	def get_ave_val(self, stocks, keypath):
+		if len(stocks) == 0:
+			return 0.0
+
+		val = 0.0
+		for stk in stocks:
+			val += self.numValueForKeyPath(stock=stk, keypath=keypath)
+		return (val / len(stocks))
+
+	@classmethod
 	def get_ave_dividedval(self, stocks, numerator, denominator):
 		numtot = 0.0
 		dentot = 0.0
@@ -145,6 +194,53 @@ class StockUtil(object):
 			denval = self.numValueForKeyPath(stock=stk, keypath=denominator)
 			numtot += numval
 			dentot += denval
+		if dentot == 0:
+			return 0.0
+		else:
+			return numtot / dentot
+
+	@classmethod
+	def get_ave_weighted_dividedval(self, stocks, numforms, numprop, denforms, denprop, year):
+		numtot = 0.0
+		dentot = 0.0
+		for stk in stocks:
+			numkeypath = '%s[%s].%s' % (numforms, year, numprop)
+			numval = self.numValueForKeyPath(stock=stk, keypath=numkeypath)
+
+			den1keypath = '%s[%s].%s' % (denforms, year, denprop)
+			den1val = self.numValueForKeyPath(stock=stk, keypath=den1keypath)
+
+			den0keypath = '%s[%d].%s' % (denforms, int(year) - 1, denprop)
+			den0val = self.numValueForKeyPath(stock=stk, keypath=den0keypath)
+			if int(den0val) == 0:
+				denval = den1val
+			else:
+				denval = (den1val + den0val) / 2
+
+			if denval != 0:
+				numtot += numval
+				dentot += denval
+
+		if dentot == 0:
+			return 0.0
+		else:
+			return numtot / dentot
+
+	@classmethod
+	def get_ave_thisdividedlast(self, stocks, numforms, numprop, denforms, denprop, year):
+		numtot = 0.0
+		dentot = 0.0
+		for stk in stocks:
+			numkeypath = '%s[%s].%s' % (numforms, year, numprop)
+			numval = self.numValueForKeyPath(stock=stk, keypath=numkeypath)
+
+			denkeypath = '%s[%d].%s' % (denforms, int(year) - 1, denprop)
+			denval = self.numValueForKeyPath(stock=stk, keypath=denkeypath)
+
+			if denval != 0:
+				numtot += numval
+				dentot += denval
+
 		if dentot == 0:
 			return 0.0
 		else:

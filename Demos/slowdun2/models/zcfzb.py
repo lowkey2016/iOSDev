@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import utils.util_cons as Cons
+
 ### 资产负债表
 class ZCFZB(object):
     reportdate = "" # 报表日期
@@ -82,4 +84,24 @@ class ZCFZB(object):
                 else:
                     self.__dict__[k] = 0.0
                     
+        # 应收款总和
         self.rectot = self.notesrece + self.accorece + self.interece + self.dividrece + self.otherrece + self.longrece
+       
+        # 生产相关资产总和
+        self.prodassetot = self.fixedassenet + self.consprog + self.engimate + self.prodasse + self.comasse + self.hydrasset + self.intaasset + self.deveexpe + self.goodwill + self.prepexpe + self.logprepexpe + self.defetaxasset
+
+        # 投资相关资产总和
+        self.inveassetot = self.tradfinasset + self.avaisellasse + self.holdinvedue + self.equiinve + self.otherlonginve + self.inveprop
+
+        # 有息负债
+        self.borrtot = self.shorttermborr + self.longborr
+        # 有息负债率 = 有息负债 / 总资产
+        if self.totasset == 0:
+            self.borrate = 0
+        else:
+            self.borrate = self.borrtot / self.totasset
+        # 货币资金有息负债覆盖率 = 货币资金 / 有息负债
+        if self.borrtot == 0:
+            self.curborrcover = 0.0
+        else:
+            self.curborrcover = self.curfds / self.borrtot

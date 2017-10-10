@@ -98,3 +98,6 @@ class XJLLB(object):
                     self.__dict__[k] = ''
                 else:
                     self.__dict__[k] = 0.0
+
+        # 间接法编制的现金流量表中的折旧摊销总和
+        self.depamortot = self.assedepr + self.realestadep + self.intaasseamor + self.longdefeexpenamor

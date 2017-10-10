@@ -3,6 +3,11 @@
 Yi = 100000000
 Wan = 10000
 MIN_FLOAT = 0.0000000001
+MAX_FLOAT = 9999999999
+Percent = '%'
+
+# 求平均值
+_ave_ = '_ave_'
 
 # http://www.peise.net/
 COLOR_WHITE = '#FFFFFF'

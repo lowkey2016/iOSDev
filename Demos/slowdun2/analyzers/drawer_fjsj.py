@@ -71,6 +71,6 @@ class FJSJDrawer(object):
 		# 表尾
 		html_str += '</table>\n\n</body>\n</html>'
 
-		print html_str
+		# print html_str
 		fname = 'db/%s_%s/附加数据.html' % (self.stock.symbol, self.stock.name)
 		ResUtil.save_html_content(html_str, fname)

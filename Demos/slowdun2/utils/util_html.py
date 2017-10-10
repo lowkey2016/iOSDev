@@ -56,13 +56,15 @@ class HTMLUtil(object):
 			font_color = Cons.COLOR_WHITE
 		self.html_str += '<td style="background: %s; color: %s">%s</td>' % (color, font_color, td)
 
-	def add_table_body_td_val(self, val, color=Cons.COLOR_WHITE, yi=False, percent=False):
+	def add_table_body_td_val(self, val, color=Cons.COLOR_WHITE, unit=None):
 		assert isinstance(val, (int, float))
 		val = float(val)
-		if yi:
+		if unit == Cons.Yi:
 			s = '%.2f亿' % (val / Cons.Yi)
-		elif percent:
+		elif unit == Cons.Percent:
 			s = '%.2f%%' % (val * 100)
+		elif unit:
+			s = '%.2f%s' % (val, unit)
 		else:
 			s = '%.2f' % val
 		self.add_table_body_td(td=s, color=color)

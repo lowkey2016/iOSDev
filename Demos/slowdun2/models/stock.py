@@ -33,7 +33,7 @@ class Stock(object):
 					tmp = ZCFZB(**dic)
 					des_dics[year] = tmp
 			self.zcfzbs = des_dics
-			print self.zcfzbs
+			# print self.zcfzbs
 
 		# 解析利润表
 		fname = '%s/gslrb.json' % st_dir
@@ -52,7 +52,7 @@ class Stock(object):
 					tmp = GSLRB(**dic)
 					des_dics[year] = tmp
 			self.gslrbs = des_dics
-			print self.gslrbs
+			# print self.gslrbs
 
 		# 解析现金流量表
 		fname = '%s/xjllb.json' % st_dir
@@ -71,7 +71,7 @@ class Stock(object):
 					tmp = XJLLB(**dic)
 					des_dics[year] = tmp
 			self.xjllbs = des_dics
-			print self.xjllbs
+			# print self.xjllbs
 
 		# 解析附加数据
 		fname = '%s/fjsj.json' % st_dir
@@ -92,12 +92,4 @@ class Stock(object):
 			self.fjsjs = des_dics
 		else:
 			self.fjsjs = {}
-			print self.fjsjs
-
-		# example1
-		# stk = Stock(symbol='SZ002508', name='老板电器')
-		# zcfzb_2015 = stk.zcfzbs['2015']
-		# gslrb_2016 = stk.gslrbs['2016']
-		# roa_2016 = gslrb_2016.netprofit / zcfzb_2015.totasset
-		# roe_2016 = gslrb_2016.netprofit / zcfzb_2015.righaggr
-		# print roa_2016, roe_2016
+			# print self.fjsjs

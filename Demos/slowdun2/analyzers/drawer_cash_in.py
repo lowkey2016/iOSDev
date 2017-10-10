@@ -454,6 +454,6 @@ class CashInDrawer(object):
 		# 表尾
 		html_str += '</tbody>\n</table>\n\n</body>\n</html>'
 
-		print html_str
+		# print html_str
 		fname = 'db/%s_%s/现金流量表间接法.html' % (self.stock.symbol, self.stock.name)
 		ResUtil.save_html_content(html_str, fname)

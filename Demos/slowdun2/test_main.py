@@ -45,4 +45,7 @@ if __name__ == "__main__":
 	# fjsj = json.loads(json_data, object_hook=FJSJ.as_self)
 	# print fjsj.__dict__
 	
+	# st_mgr.fetch_fangdichan_ppp_data_from_network()
+
 	AnlzMgr.draw_jiadian_chudians()
+	# AnlzMgr.draw_fangdichan_ppp()

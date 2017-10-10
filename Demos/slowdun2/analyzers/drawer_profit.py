@@ -850,6 +850,6 @@ class ProfitDrawer(object):
 		# 表尾
 		html_str += '</body>\n</html>'
 
-		print html_str
+		# print html_str
 		fname = 'db/%s_%s/利润表.html' % (self.stock.symbol, self.stock.name)
 		ResUtil.save_html_content(html_str, fname)

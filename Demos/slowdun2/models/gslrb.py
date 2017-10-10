@@ -64,3 +64,31 @@ class GSLRB(object):
                     self.__dict__[k] = ''
                 else:
                     self.__dict__[k] = 0.0
+
+        # 营业收入 / 营业总收入
+        if self.biztotinco == 0:
+            self.bizincorate = 0.0
+        else:
+            self.bizincorate = self.bizinco / self.biztotinco
+
+        # 毛利润
+        self.grossprofit = self.bizinco - self.bizcost
+
+        # 扣除经常性损益营业利润
+        self.rmlosgainperprofit = self.biztotinco - self.biztotcost
+
+        # 三费 = 销售费用 + 管理费用 + 正数的财务费用
+        self.salmanfinexpes = self.salesexpe + self.manaexpe
+        if self.finexpe > 0:
+            self.salmanfinexpes += self.finexpe
+        # 三费 / 毛利润
+        if self.grossprofit == 0:
+            self.salmanfinexpes_gross_rate = 0.0
+        else:
+            self.salmanfinexpes_gross_rate = self.salmanfinexpes / self.grossprofit
+
+        # 非经常性损益净额
+        self.unoftenlosgain = self.perprofit - self.rmlosgainperprofit
+
+        # 营业外收支净额
+        self.noninoutnet = self.nonoreve - self.nonoexpe
