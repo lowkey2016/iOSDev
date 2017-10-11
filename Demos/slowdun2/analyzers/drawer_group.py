@@ -5,8 +5,6 @@ from models.gslrb import GSLRB
 from models.xjllb import XJLLB
 from models.fjsj import FJSJ
 from models.stock import Stock
-from filters.filter_margins import MarginsFilter
-from filters.filter_comp import CompFilter
 from utils.util_res import ResUtil
 from utils.util_stock import StockUtil
 from utils.util_html import HTMLUtil
@@ -503,6 +501,7 @@ class GroupDrawer(object):
 			val = aves_dic[k]
 			html_util.add_table_body_td_empty()
 			html_util.add_table_body_td_empty()
+			html_util.add_table_body_td_empty()
 			html_util.add_table_body_td_val(val=val, color=Cons.COLOR_YELLOW, unit=units[3])
 		html_util.add_table_body_tr_end()
 		# 表格结束
@@ -690,6 +689,22 @@ class GroupDrawer(object):
 			units=[None, Cons.Yi, Cons.Percent],
 			decending=False)
 
+		# 应收账款/营业收入 * 12
+		# 行业均值规则
+		self.add_divideval_table(
+			html_util=html_util,
+			keys=keys,
+			caption='应收账款/营业收入 * 12',
+			three_tds=['企业', '应收账款', '应收账款/营业收入 * 12'],
+			last_td='从低到高排序；行业均值规则',
+			num_forms='zcfzbs',
+			num_property='accorece',
+			den_forms='gslrbs',
+			den_property='bizinco',
+			func=lambda x:x*12,
+			units=[None, Cons.Yi, None],
+			decending=False)
+
 		# 坏账准备总和/应收账款
 		# 行业均值规则
 		self.add_divideval_table(
@@ -742,12 +757,7 @@ class GroupDrawer(object):
 
 		# 销产比
 		# 行业均值规则
-		inve_unit = ''
-		for stk in self.stocks_group:
-			if len(inve_unit) > 0:
-				break
-			if '2016' in stk.fjsjs.keys():
-				inve_unit = stk.fjsjs['2016'].inve_unit
+		inve_unit = StockUtil.get_inve_unit(stocks_group=self.stocks_group)
 		self.add_divideval_table(
 			html_util=html_util,
 			keys=keys,
@@ -977,6 +987,21 @@ class GroupDrawer(object):
 			units=[None, Cons.Yi, None],
 			decending=False)
 
+		# 简化的自由现金流 = 经营现金流净额 - 投资活动现金流出净额
+		# 行业均值规则
+		self.add_num_table(
+			html_util=html_util,
+			keys=keys,
+			caption='简化的自由现金流',
+			two_tds=['企业', '简化的自由现金流'],
+			last_td='从高到低排序；行业均值规则',
+			forms='xjllbs',
+			prop='simfreecashflow',
+			compvals=[Cons._ave_],
+			func=None,
+			units=[None, Cons.Yi],
+			decending=True)
+	
 	# 八、安全性
 	def draw_safety_quality(self, html_util, keys):
 		html_util.add_title(title='八、安全性')
@@ -1682,18 +1707,18 @@ class GroupDrawer(object):
 			units=[None, Cons.Yi, Cons.Yi, None],
 			decending=True)
 
-		# 杠杆系数：总资产 / 净资产
+		# 杠杆系数：加权平均总资产 / 净资产
 		# 行业均值规则
-		self.add_divideval_table(
+		self.add_weightdave_dividedval_table(
 			html_util=html_util,
 			keys=keys,
-			caption='杠杆系数：总资产 / 净资产',
-			three_tds=['企业', '总资产', '总资产 / 净资产'],
-			last_td='从低到高排序；行业均值规则',
+			caption='杠杆系数：加权平均总资产 / 净资产',
+			four_tds=['企业', '净资产', '加权平均总资产', '杠杆系数'],
+			last_td='从低到高排序；行业均值规则；杠杆系数 = 加权平均总资产 / 净资产',
 			num_forms='zcfzbs',
-			num_property='totasset',
+			num_property='righaggr',
 			den_forms='zcfzbs',
-			den_property='righaggr',
-			func=None,
-			units=[None, Cons.Yi, None],
+			den_property='totasset',
+			func=lambda x: 1/x,
+			units=[None, Cons.Yi, Cons.Yi, None],
 			decending=False)

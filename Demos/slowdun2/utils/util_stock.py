@@ -295,3 +295,13 @@ class StockUtil(object):
 			elif down >= margin_up:
 				return Cons.COLOR_RED
 		return Cons.COLOR_WHITE
+
+	@classmethod
+	def get_inve_unit(self, stocks_group):
+		inve_unit = ''
+		for stk in stocks_group:
+			if len(inve_unit) > 0:
+				break
+			if '2016' in stk.fjsjs.keys():
+				inve_unit = stk.fjsjs['2016'].inve_unit
+		return inve_unit

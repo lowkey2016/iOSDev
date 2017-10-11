@@ -101,3 +101,10 @@ class XJLLB(object):
 
         # 间接法编制的现金流量表中的折旧摊销总和
         self.depamortot = self.assedepr + self.realestadep + self.intaasseamor + self.longdefeexpenamor
+
+        # 简化的自由现金流 = 经营现金流净额 - 投资活动现金流出净额
+        if self.invnetcashflow < 0:
+                outflow = -self.invnetcashflow
+        else:
+            outflow = 0
+        self.simfreecashflow = self.mananetr - outflow

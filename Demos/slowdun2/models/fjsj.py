@@ -88,8 +88,14 @@ class FJSJ(object):
                 else:
                     self.__dict__[k] = 0.0
 
+        # 应收账款之和
+        self.accorecetot = self.accorece_credit_tot + self.accorece_single_tot + self.accorece_single_imp_tot
+
         # 应收账款坏账计提总额
         self.accorece_bad_tot = self.accorece_credit_bad + self.accorece_single_bad + self.accorece_single_imp_bad
+
+        # 产、销、存量之和
+        self.inve_prodsalesave = self.inve_prod + self.inve_sale + self.inve_save
 
         # 产量和存量之和
         self.inve_prodandsave = self.inve_prod + self.inve_save

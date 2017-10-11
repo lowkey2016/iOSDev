@@ -86,12 +86,33 @@ class ZCFZB(object):
                     
         # 应收款总和
         self.rectot = self.notesrece + self.accorece + self.interece + self.dividrece + self.otherrece + self.longrece
-       
+
+        # 经营相关资产总和
+        self.manageassetot = self.prep + self.rectot + self.inve
+        
         # 生产相关资产总和
         self.prodassetot = self.fixedassenet + self.consprog + self.engimate + self.prodasse + self.comasse + self.hydrasset + self.intaasset + self.deveexpe + self.goodwill + self.prepexpe + self.logprepexpe + self.defetaxasset
 
         # 投资相关资产总和
         self.inveassetot = self.tradfinasset + self.avaisellasse + self.holdinvedue + self.equiinve + self.otherlonginve + self.inveprop
+
+        # 其它资产总和
+        self.otherasettot = self.othercurrasse + self.othernoncasse
+
+        # 速动资产
+        self.liquidaset = self.totcurrasset - self.inve
+
+        # 融资性负债合计
+        self.finliabtot = self.shorttermborr + self.longborr + self.shorttermbdspaya + self.bdspaya
+
+        # 经营性负债合计
+        self.manageliabtot = self.notespaya + self.accopaya + self.advapaym + self.copeworkersal + self.intepaya + self.otherpay + self.longpaya + self.specpaya
+
+        # 分配性负债合计
+        self.payliabtot = self.taxespaya + self.divipaya
+
+        # 其它负债合计
+        self.otherliabtot = self.tradfinliab + self.duenoncliab + self.longdefeinco + self.defeincotaxliab + self.othercurreliabi + self.othernoncliabi
 
         # 有息负债
         self.borrtot = self.shorttermborr + self.longborr

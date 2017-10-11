@@ -71,6 +71,9 @@ class GSLRB(object):
         else:
             self.bizincorate = self.bizinco / self.biztotinco
 
+        # 一个月的营业收入
+        self.bizincopermonth = self.bizinco / 12
+
         # 毛利润
         self.grossprofit = self.bizinco - self.bizcost
 
