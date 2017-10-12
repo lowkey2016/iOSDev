@@ -19,9 +19,6 @@ class CashDrawer(object):
 		self.comdrawer = CommonDrawer(stock=stock, keys=keys)
 
 	def draw(self):
-		html_str = '' ################################################################################
-		keys = [] ################################################################################
-
 		self.comdrawer.add_start()
 
 		# 标题部分

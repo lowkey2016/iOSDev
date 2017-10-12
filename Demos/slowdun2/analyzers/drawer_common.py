@@ -199,7 +199,7 @@ class CommonDrawer(object):
 		html_util.add_table_body_td(td=last_td, color=Cons.COLOR_WHITE)
 		html_util.add_table_body_tr_end()
 
-	def add_num_table_line(self, two_tds, td_colors, forms, prop, unit, last_td, val_color_map_func=None):
+	def add_num_table_line(self, two_tds, td_colors, forms, prop, unit, last_td, val_color_map_func=None, val_map_func=None):
 		html_util = self.html_util
 		keys = self.keys
 
@@ -214,6 +214,8 @@ class CommonDrawer(object):
 				color = val_color_map_func(val)
 			else:
 				color = Cons.COLOR_WHITE
+			if val_map_func:
+				val = val_map_func(val)
 			html_util.add_table_body_td_val(val=val, color=color, unit=unit)
 			html_util.add_table_body_td_empty()
 		html_util.add_table_body_td(td=last_td, color=Cons.COLOR_WHITE)
