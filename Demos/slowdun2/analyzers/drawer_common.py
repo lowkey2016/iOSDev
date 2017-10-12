@@ -51,7 +51,7 @@ class CommonDrawer(object):
 		html_util.add_end()
 		html_util.save_to_stock_file(stock=self.stock, fname=fname)
 
-	def add_dividedval_table_line(self, two_tds, td_colors, num_forms, num_prop, den_forms, den_prop, two_units, last_td, only_dividedval_column=False):
+	def add_dividedval_table_line(self, two_tds, td_colors, num_forms, num_prop, den_forms, den_prop, two_units, last_td, only_dividedval_column=False, dividedval_color_map_func=None):
 		html_util = self.html_util
 		keys = self.keys
 
@@ -72,12 +72,16 @@ class CommonDrawer(object):
 				use_percent_format = False
 			rate = StockUtil.getDivideVal(num=numval, den=denval, use_percent_format=False)
 
+			if dividedval_color_map_func:
+				color = dividedval_color_map_func(rate)
+			else:
+				color = Cons.COLOR_WHITE
 			if only_dividedval_column:
-				html_util.add_table_body_td_val(val=rate, color=Cons.COLOR_WHITE, unit=two_units[0])
+				html_util.add_table_body_td_val(val=rate, color=color, unit=two_units[0])
 				html_util.add_table_body_td_empty()
 			else:
-				html_util.add_table_body_td_val(val=numval, color=Cons.COLOR_WHITE, unit=two_units[0])
-				html_util.add_table_body_td_val(val=rate, color=Cons.COLOR_WHITE, unit=two_units[1])
+				html_util.add_table_body_td_val(val=numval, color=color, unit=two_units[0])
+				html_util.add_table_body_td_val(val=rate, color=color, unit=two_units[1])
 		html_util.add_table_body_td(td=last_td, color=Cons.COLOR_WHITE)
 		html_util.add_table_body_tr_end()
 
@@ -153,7 +157,7 @@ class CommonDrawer(object):
 			prop=num_prop,
 			last_td=last_td)
 
-	def add_weightedave_dividedval_table_line(self, two_tds, td_colors, num_forms, num_prop, den_forms, den_prop, two_units, last_td, func=None):
+	def add_weightedave_dividedval_table_line(self, two_tds, td_colors, num_forms, num_prop, den_forms, den_prop, two_units, last_td, func=None, color_map_func=None):
 		html_util = self.html_util
 		keys = self.keys
 
@@ -165,12 +169,16 @@ class CommonDrawer(object):
 		for k in keys:
 			numkeypath = '%s[%s].%s' % (num_forms, k, num_prop)
 			denkeypath = '%s[%s].%s' % (den_forms, k, den_prop)
-			numval = StockUtil.numValueForKeyPath(stock=self.stock, keypath=numkeypath)
-			denval = StockUtil.numValueForKeyPath(stock=self.stock, keypath=denkeypath)
+			# numval = StockUtil.numValueForKeyPath(stock=self.stock, keypath=numkeypath)
+			# denval = StockUtil.numValueForKeyPath(stock=self.stock, keypath=denkeypath)
 			aveval = StockUtil.get_weighted_dividedval(stock=self.stock, numforms=num_forms, numprop=num_prop, denforms=den_forms, denprop=den_prop, year=k)
 			if func:
 				aveval = func(aveval)
-			html_util.add_table_body_td_val(val=aveval, color=Cons.COLOR_WHITE, unit=two_units[0])
+			if color_map_func:
+				color = color_map_func(aveval)
+			else:
+				color = Cons.COLOR_WHITE
+			html_util.add_table_body_td_val(val=aveval, color=color, unit=two_units[0])
 			html_util.add_table_body_td_empty()
 		html_util.add_table_body_td(td=last_td, color=Cons.COLOR_WHITE)
 		html_util.add_table_body_tr_end()
@@ -191,7 +199,7 @@ class CommonDrawer(object):
 		html_util.add_table_body_td(td=last_td, color=Cons.COLOR_WHITE)
 		html_util.add_table_body_tr_end()
 
-	def add_num_table_line(self, two_tds, td_colors, forms, prop, unit, last_td):
+	def add_num_table_line(self, two_tds, td_colors, forms, prop, unit, last_td, val_color_map_func=None):
 		html_util = self.html_util
 		keys = self.keys
 
@@ -202,7 +210,11 @@ class CommonDrawer(object):
 		for k in keys:
 			keypath = '%s[%s].%s' % (forms, k, prop)
 			val = StockUtil.numValueForKeyPath(stock=self.stock, keypath=keypath)
-			html_util.add_table_body_td_val(val=val, color=Cons.COLOR_WHITE, unit=unit)
+			if val_color_map_func:
+				color = val_color_map_func(val)
+			else:
+				color = Cons.COLOR_WHITE
+			html_util.add_table_body_td_val(val=val, color=color, unit=unit)
 			html_util.add_table_body_td_empty()
 		html_util.add_table_body_td(td=last_td, color=Cons.COLOR_WHITE)
 		html_util.add_table_body_tr_end()

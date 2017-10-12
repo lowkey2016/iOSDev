@@ -77,8 +77,14 @@ class GSLRB(object):
         # 毛利润
         self.grossprofit = self.bizinco - self.bizcost
 
+        # 息税前利润
+        self.rmtaxinteprofit = self.biztotinco - self.biztotcost + self.inteexpe
+
         # 扣除经常性损益营业利润
         self.rmlosgainperprofit = self.biztotinco - self.biztotcost
+
+        # 销售费用和管理费用总和
+        self.salmanexpes = self.salesexpe + self.manaexpe
 
         # 三费 = 销售费用 + 管理费用 + 正数的财务费用
         self.salmanfinexpes = self.salesexpe + self.manaexpe

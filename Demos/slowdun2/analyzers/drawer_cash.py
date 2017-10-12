@@ -3,8 +3,9 @@
 from models.xjllb import XJLLB
 from models.fjsj import FJSJ
 from models.stock import Stock
-from utils.util_res import ResUtil
+from utils.util_stock import StockUtil
 import utils.util_cons as Cons
+from drawer_common import CommonDrawer
 
 class CashDrawer(object):
 	def __init__(self, stock):
@@ -12,681 +13,602 @@ class CashDrawer(object):
 			return
 		self.stock = stock
 
-	def draw(self):
-		html_str = '<html>'
-		html_str += """
-		<head>
-		<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-		<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-		<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-		<style>tbody tr:first-child td:nth-child(1), tbody tr:first-child td:nth-child(2) { white-space: nowrap; } thead tr:first-child th:last-child { white-space: nowrap; padding: 5px 50px; }</style>
-		</head>
-		"""
-
-		html_str += '<body>\n<h4>现金流量表</h4>\n\n<table class="table table-bordered">\n\t<caption>直接法编制</caption>\n<thead><tr>\n\t<th>项目</th>\n\t<th>所属分类</th>'
-
-		keys = [k for k in sorted(self.stock.xjllbs)]
+		keys = [k for k in sorted(self.stock.zcfzbs)]
 		keys.reverse()
+		
+		self.comdrawer = CommonDrawer(stock=stock, keys=keys)
 
-		# 表头
-		for k in keys:
-			tmpstr = '\t<th colspan="2">%s</th>\n' % k
-			html_str += tmpstr
-		html_str += '\t<th>备注</th>\n</tr>\n</thead>\n<tbody>\n'
+	def draw(self):
+		html_str = '' ################################################################################
+		keys = [] ################################################################################
+
+		self.comdrawer.add_start()
+
+		# 标题部分
+		self.comdrawer.add_title_and_table_head(
+			title='现金流量表',
+			caption='直接法编制',
+			two_ths=['项目', '所属分类'])
 
 		# 一、经营活动现金流
 
 		# 销售商品、提供劳务收到的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">销售商品、提供劳务收到的现金</td>\n\t<td style="background: %s; color: #FFFFFF">经营活动 +</td>\n' % (Cons.COLOR_PINK, Cons.COLOR_PINK)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.laborgetcash:
-				val = xb.laborgetcash
-			else:
-				val = 0.0
-			xb.laborgetcash = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['销售商品、提供劳务收到的现金', '经营活动 +'],
+			td_colors=[Cons.COLOR_GREEN, Cons.COLOR_GREEN],
+			num_forms='xjllbs',
+			num_prop='laborgetcash',
+			den_forms='xjllbs',
+			den_prop='bizcashinfl',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以经营活动现金流入小计')
 
 		# 销售商品、提供劳务收到的现金 / 营业收入
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">销售商品、提供劳务收到的现金 / 营业收入</td>\n\t<td style="background: %s; color: #FFFFFF">经营活动 +</td>\n' % (Cons.COLOR_PINK, Cons.COLOR_PINK)
-		for k in keys:
-			gb = self.stock.gslrbs[k]
-			xb = self.stock.xjllbs[k]
-			val = xb.laborgetcash / gb.bizinco
-			if val >= 1:
-				color = Cons.COLOR_GREEN
-			else:
-				color = Cons.COLOR_RED
-			html_str += '\t<td style="background: %s; color: #FFFFFF">%.2f</td>\n\t<td></td>\n' % (color, val)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['销售商品、提供劳务收到的现金 / 营业收入', ''],
+			td_colors=[Cons.COLOR_WHITE, Cons.COLOR_WHITE],
+			num_forms='xjllbs',
+			num_prop='laborgetcash',
+			den_forms='gslrbs',
+			den_prop='bizinco',
+			two_units=[None, None],
+			last_td='',
+			only_dividedval_column=True)
 
 		# 收到的其他与经营活动有关的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">收到的其他与经营活动有关的现金</td>\n\t<td style="background: %s; color: #FFFFFF">经营活动 +</td>\n' % (Cons.COLOR_PINK, Cons.COLOR_PINK)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.receotherbizcash:
-				val = xb.receotherbizcash
-			else:
-				val = 0.0
-			xb.receotherbizcash = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['收到的其他与经营活动有关的现金', '经营活动 +'],
+			td_colors=[Cons.COLOR_GREEN, Cons.COLOR_GREEN],
+			num_forms='xjllbs',
+			num_prop='receotherbizcash',
+			den_forms='xjllbs',
+			den_prop='bizcashinfl',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以经营活动现金流入小计')
 
 		# 经营活动现金流入小计
-		html_str += '<tr bgcolor="white">\n\t<td>经营活动现金流入小计</td>\n\t<td>经营活动 +</td>\n'
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.bizcashinfl:
-				val = xb.bizcashinfl
-			else:
-				val = 0.0
-			xb.bizcashinfl = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['经营活动现金流入小计', '经营活动 + ='],
+			td_colors=[Cons.COLOR_GREEN, Cons.COLOR_GREEN],
+			num_forms='xjllbs',
+			num_prop='bizcashinfl',
+			den_forms='xjllbs',
+			den_prop='bizcashinfl',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以经营活动现金流入小计')
 
 		# 购买商品、接受劳务支付的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">购买商品、接受劳务支付的现金</td>\n\t<td style="background: %s; color: #FFFFFF">经营活动 -</td>\n' % (Cons.COLOR_PINK, Cons.COLOR_PINK)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.labopayc:
-				val = xb.labopayc
-			else:
-				val = 0.0
-			xb.labopayc = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['购买商品、接受劳务支付的现金', '经营活动 -'],
+			td_colors=[Cons.COLOR_RED, Cons.COLOR_RED],
+			num_forms='xjllbs',
+			num_prop='labopayc',
+			den_forms='xjllbs',
+			den_prop='bizcashoutf',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以经营活动现金流出小计')
 
 		# 支付给职工以及为职工支付的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">支付给职工以及为职工支付的现金</td>\n\t<td style="background: %s; color: #FFFFFF">经营活动 -</td>\n' % (Cons.COLOR_PINK, Cons.COLOR_PINK)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.payworkcash:
-				val = xb.payworkcash
-			else:
-				val = 0.0
-			xb.payworkcash = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['支付给职工以及为职工支付的现金', '经营活动 -'],
+			td_colors=[Cons.COLOR_RED, Cons.COLOR_RED],
+			num_forms='xjllbs',
+			num_prop='payworkcash',
+			den_forms='xjllbs',
+			den_prop='bizcashoutf',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以经营活动现金流出小计')
 
 		# 支付的各项税费
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">支付的各项税费</td>\n\t<td style="background: %s; color: #FFFFFF">经营活动 -</td>\n' % (Cons.COLOR_PINK, Cons.COLOR_PINK)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.paytax:
-				val = xb.paytax
-			else:
-				val = 0.0
-			xb.paytax = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['支付的各项税费', '经营活动 -'],
+			td_colors=[Cons.COLOR_RED, Cons.COLOR_RED],
+			num_forms='xjllbs',
+			num_prop='paytax',
+			den_forms='xjllbs',
+			den_prop='bizcashoutf',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以经营活动现金流出小计')
 
 		# 支付的其他与经营活动有关的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">支付的其他与经营活动有关的现金</td>\n\t<td style="background: %s; color: #FFFFFF">经营活动 -</td>\n' % (Cons.COLOR_PINK, Cons.COLOR_PINK)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.payacticash:
-				val = xb.payacticash
-			else:
-				val = 0.0
-			xb.payacticash = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['支付的其他与经营活动有关的现金', '经营活动 -'],
+			td_colors=[Cons.COLOR_RED, Cons.COLOR_RED],
+			num_forms='xjllbs',
+			num_prop='payacticash',
+			den_forms='xjllbs',
+			den_prop='bizcashoutf',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以经营活动现金流出小计')
 
 		# 经营活动现金流出小计
-		html_str += '<tr bgcolor="white">\n\t<td>经营活动现金流出小计</td>\n\t<td>经营活动 -</td>\n'
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.bizcashoutf:
-				val = xb.bizcashoutf
-			else:
-				val = 0.0
-			xb.bizcashoutf = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['经营活动现金流出小计', '经营活动 - ='],
+			td_colors=[Cons.COLOR_RED, Cons.COLOR_RED],
+			num_forms='xjllbs',
+			num_prop='bizcashoutf',
+			den_forms='xjllbs',
+			den_prop='bizcashoutf',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以经营活动现金流出小计')
 
 		# 经营活动产生的现金流量净额
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">经营活动产生的现金流量净额</td>\n\t<td style="background: %s; color: #FFFFFF">经营活动</td>\n' % (Cons.COLOR_YELLOW, Cons.COLOR_YELLOW)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.mananetr:
-				val = xb.mananetr
-			else:
-				val = 0.0
-			xb.mananetr = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['经营活动产生的现金流量净额', '经营活动 ='],
+			td_colors=[Cons.COLOR_PURPLE, Cons.COLOR_PURPLE],
+			num_forms='xjllbs',
+			num_prop='mananetr',
+			den_forms='xjllbs',
+			den_prop='cashnetr',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以现金及现金等价物净增加额')
 
-		# 经营现金流净额 / 应收款
-		html_str += '<tr>\n\t<td bgcolor="white">经营现金流净额 / 应收款</td>\n\t<td></td>\n'
-		for k in keys:
-			zb = self.stock.zcfzbs[k]
-			xb = self.stock.xjllbs[k]
-
-			val = 0.0
-			val += zb.notesrece
-			val += zb.accorece
-			val += zb.interece
-			val += zb.dividrece
-			val += zb.otherrece
-			val += zb.longrece
-			rectot = val
-
-			val = xb.mananetr / rectot
-
-			html_str += '\t<td>%.2f</td>\n\t<td></td>\n' % (val)
-		html_str += '</tr>\n'
+		# 经营现金流净额 / 应收款总和
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['经营现金流净额 / 应收款总和', ''],
+			td_colors=[Cons.COLOR_WHITE, Cons.COLOR_WHITE],
+			num_forms='xjllbs',
+			num_prop='mananetr',
+			den_forms='zcfzbs',
+			den_prop='rectot',
+			two_units=[None, None],
+			last_td='',
+			only_dividedval_column=True)
 
 		# 二、投资活动现金流
 
 		# 收回投资所收到的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">收回投资所收到的现金</td>\n\t<td style="background: %s; color: #FFFFFF">投资活动 +</td>\n' % (Cons.COLOR_GREEN, Cons.COLOR_GREEN)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.withinvgetcash:
-				val = xb.withinvgetcash
-			else:
-				val = 0.0
-			xb.withinvgetcash = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['收回投资所收到的现金', '投资活动 +'],
+			td_colors=[Cons.COLOR_GREEN, Cons.COLOR_GREEN],
+			num_forms='xjllbs',
+			num_prop='withinvgetcash',
+			den_forms='xjllbs',
+			den_prop='invcashinfl',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以投资活动现金流入小计')
 
 		# 取得投资收益收到的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">取得投资收益收到的现金</td>\n\t<td style="background: %s; color: #FFFFFF">投资活动 +</td>\n' % (Cons.COLOR_GREEN, Cons.COLOR_GREEN)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.inveretugetcash:
-				val = xb.inveretugetcash
-			else:
-				val = 0.0
-			xb.inveretugetcash = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['取得投资收益收到的现金', '投资活动 +'],
+			td_colors=[Cons.COLOR_GREEN, Cons.COLOR_GREEN],
+			num_forms='xjllbs',
+			num_prop='inveretugetcash',
+			den_forms='xjllbs',
+			den_prop='invcashinfl',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以投资活动现金流入小计')
 
 		# 处置固定资产、无形资产和其他长期资产所回收的现金净额
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">处置固定资产、无形资产和其他长期资产所回收的现金净额</td>\n\t<td style="background: %s; color: #FFFFFF">投资活动 +</td>\n' % (Cons.COLOR_GREEN, Cons.COLOR_GREEN)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.fixedassetnetc:
-				val = xb.fixedassetnetc
-			else:
-				val = 0.0
-			xb.fixedassetnetc = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['处置固定资产、无形资产和其他长期资产所回收的现金净额', '投资活动 +'],
+			td_colors=[Cons.COLOR_GREEN, Cons.COLOR_GREEN],
+			num_forms='xjllbs',
+			num_prop='fixedassetnetc',
+			den_forms='xjllbs',
+			den_prop='invcashinfl',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以投资活动现金流入小计')
 
 		# 处置子公司及其他营业单位收到的现金净额
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">处置子公司及其他营业单位收到的现金净额</td>\n\t<td style="background: %s; color: #FFFFFF">投资活动 +</td>\n' % (Cons.COLOR_GREEN, Cons.COLOR_GREEN)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.subsnetc:
-				val = xb.subsnetc
-			else:
-				val = 0.0
-			xb.subsnetc = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['处置子公司及其他营业单位收到的现金净额', '投资活动 +'],
+			td_colors=[Cons.COLOR_GREEN, Cons.COLOR_GREEN],
+			num_forms='xjllbs',
+			num_prop='subsnetc',
+			den_forms='xjllbs',
+			den_prop='invcashinfl',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以投资活动现金流入小计')
 
 		# 收到的其他与投资活动有关的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">收到的其他与投资活动有关的现金</td>\n\t<td style="background: %s; color: #FFFFFF">投资活动 +</td>\n' % (Cons.COLOR_GREEN, Cons.COLOR_GREEN)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.receinvcash:
-				val = xb.receinvcash
-			else:
-				val = 0.0
-			xb.receinvcash = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['收到的其他与投资活动有关的现金', '投资活动 +'],
+			td_colors=[Cons.COLOR_GREEN, Cons.COLOR_GREEN],
+			num_forms='xjllbs',
+			num_prop='receinvcash',
+			den_forms='xjllbs',
+			den_prop='invcashinfl',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以投资活动现金流入小计')
 
 		# 减少质押和定期存款所收到的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">减少质押和定期存款所收到的现金</td>\n\t<td style="background: %s; color: #FFFFFF">投资活动 +</td>\n' % (Cons.COLOR_GREEN, Cons.COLOR_GREEN)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.reducashpled:
-				val = xb.reducashpled
-			else:
-				val = 0.0
-			xb.reducashpled = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['减少质押和定期存款所收到的现金', '投资活动 +'],
+			td_colors=[Cons.COLOR_GREEN, Cons.COLOR_GREEN],
+			num_forms='xjllbs',
+			num_prop='reducashpled',
+			den_forms='xjllbs',
+			den_prop='invcashinfl',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以投资活动现金流入小计')
 
 		# 投资活动现金流入小计
-		html_str += '<tr bgcolor="white">\n\t<td>投资活动现金流入小计</td>\n\t<td>投资活动 +</td>\n'
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.invcashinfl:
-				val = xb.invcashinfl
-			else:
-				val = 0.0
-			xb.invcashinfl = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['投资活动现金流入小计', '投资活动 + ='],
+			td_colors=[Cons.COLOR_GREEN, Cons.COLOR_GREEN],
+			num_forms='xjllbs',
+			num_prop='invcashinfl',
+			den_forms='xjllbs',
+			den_prop='invcashinfl',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以投资活动现金流入小计')
 
 		# 购建固定资产、无形资产和其他长期资产所支付的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">购建固定资产、无形资产和其他长期资产所支付的现金</td>\n\t<td style="background: %s; color: #FFFFFF">投资活动 -</td>\n' % (Cons.COLOR_GREEN, Cons.COLOR_GREEN)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.acquassetcash:
-				val = xb.acquassetcash
-			else:
-				val = 0.0
-			xb.acquassetcash = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['购建固定资产、无形资产和其他长期资产所支付的现金', '投资活动 -'],
+			td_colors=[Cons.COLOR_RED, Cons.COLOR_RED],
+			num_forms='xjllbs',
+			num_prop='acquassetcash',
+			den_forms='xjllbs',
+			den_prop='invcashoutf',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以投资活动现金流出小计')
 
 		# 购买固定资产、无形资产等支出 / 经营现金流净额
-		html_str += '<tr>\n\t<td>购买固定资产、无形资产等支出 / 经营现金流净额</td>\n\t<td>投资活动 -</td>\n'
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			val = xb.acquassetcash / xb.mananetr
-			html_str += '\t<td>%.2f</td>\n\t<td></td>\n' % (val)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['购买固定资产、无形资产等支出 / 经营现金流净额', ''],
+			td_colors=[Cons.COLOR_WHITE, Cons.COLOR_WHITE],
+			num_forms='xjllbs',
+			num_prop='acquassetcash',
+			den_forms='xjllbs',
+			den_prop='mananetr',
+			two_units=[None, None],
+			last_td='',
+			only_dividedval_column=True)
 
 		# 投资所支付的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">投资所支付的现金</td>\n\t<td style="background: %s; color: #FFFFFF">投资活动 -</td>\n' % (Cons.COLOR_GREEN, Cons.COLOR_GREEN)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.invpayc:
-				val = xb.invpayc
-			else:
-				val = 0.0
-			xb.invpayc = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['投资所支付的现金', '投资活动 -'],
+			td_colors=[Cons.COLOR_RED, Cons.COLOR_RED],
+			num_forms='xjllbs',
+			num_prop='invpayc',
+			den_forms='xjllbs',
+			den_prop='invcashoutf',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以投资活动现金流出小计')
 
 		# 质押贷款净增加额
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">质押贷款净增加额</td>\n\t<td style="background: %s; color: #FFFFFF">投资活动 -</td>\n' % (Cons.COLOR_GREEN, Cons.COLOR_GREEN)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.loannetr:
-				val = xb.loannetr
-			else:
-				val = 0.0
-			xb.loannetr = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['质押贷款净增加额', '投资活动 -'],
+			td_colors=[Cons.COLOR_RED, Cons.COLOR_RED],
+			num_forms='xjllbs',
+			num_prop='loannetr',
+			den_forms='xjllbs',
+			den_prop='invcashoutf',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以投资活动现金流出小计')
 
 		# 取得子公司及其他营业单位支付的现金净额
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">取得子公司及其他营业单位支付的现金净额</td>\n\t<td style="background: %s; color: #FFFFFF">投资活动 -</td>\n' % (Cons.COLOR_GREEN, Cons.COLOR_GREEN)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.subspaynetcash:
-				val = xb.subspaynetcash
-			else:
-				val = 0.0
-			xb.subspaynetcash = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['取得子公司及其他营业单位支付的现金净额', '投资活动 -'],
+			td_colors=[Cons.COLOR_RED, Cons.COLOR_RED],
+			num_forms='xjllbs',
+			num_prop='subspaynetcash',
+			den_forms='xjllbs',
+			den_prop='invcashoutf',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以投资活动现金流出小计')
 
 		# 支付的其他与投资活动有关的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">支付的其他与投资活动有关的现金</td>\n\t<td style="background: %s; color: #FFFFFF">投资活动 -</td>\n' % (Cons.COLOR_GREEN, Cons.COLOR_GREEN)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.payinvecash:
-				val = xb.payinvecash
-			else:
-				val = 0.0
-			xb.payinvecash = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['支付的其他与投资活动有关的现金', '投资活动 -'],
+			td_colors=[Cons.COLOR_RED, Cons.COLOR_RED],
+			num_forms='xjllbs',
+			num_prop='payinvecash',
+			den_forms='xjllbs',
+			den_prop='invcashoutf',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以投资活动现金流出小计')
 
 		# 增加质押和定期存款所支付的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">增加质押和定期存款所支付的现金</td>\n\t<td style="background: %s; color: #FFFFFF">投资活动 -</td>\n' % (Cons.COLOR_GREEN, Cons.COLOR_GREEN)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.incrcashpled:
-				val = xb.incrcashpled
-			else:
-				val = 0.0
-			xb.incrcashpled = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['增加质押和定期存款所支付的现金', '投资活动 -'],
+			td_colors=[Cons.COLOR_RED, Cons.COLOR_RED],
+			num_forms='xjllbs',
+			num_prop='incrcashpled',
+			den_forms='xjllbs',
+			den_prop='invcashoutf',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以投资活动现金流出小计')
 
 		# 投资活动现金流出小计
-		html_str += '<tr bgcolor="white">\n\t<td>投资活动现金流出小计</td>\n\t<td>投资活动 -</td>\n'
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.invcashoutf:
-				val = xb.invcashoutf
-			else:
-				val = 0.0
-			xb.invcashoutf = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['投资活动现金流出小计', '投资活动 - ='],
+			td_colors=[Cons.COLOR_RED, Cons.COLOR_RED],
+			num_forms='xjllbs',
+			num_prop='invcashoutf',
+			den_forms='xjllbs',
+			den_prop='invcashoutf',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以投资活动现金流出小计')
 
 		# 投资活动产生的现金流量净额
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">投资活动产生的现金流量净额</td>\n\t<td style="background: %s; color: #FFFFFF">投资活动</td>\n' % (Cons.COLOR_YELLOW, Cons.COLOR_YELLOW)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.invnetcashflow:
-				val = xb.invnetcashflow
-			else:
-				val = 0.0
-			xb.invnetcashflow = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['投资活动产生的现金流量净额', '投资活动 ='],
+			td_colors=[Cons.COLOR_PURPLE, Cons.COLOR_PURPLE],
+			num_forms='xjllbs',
+			num_prop='invnetcashflow',
+			den_forms='xjllbs',
+			den_prop='cashnetr',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以现金及现金等价物净增加额')
 
 		# 三、筹资活动现金流
 
 		# 吸收投资收到的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">吸收投资收到的现金</td>\n\t<td style="background: %s; color: #FFFFFF">筹资活动 +</td>\n' % (Cons.COLOR_RED, Cons.COLOR_RED)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.invrececash:
-				val = xb.invrececash
-			else:
-				val = 0.0
-			xb.invrececash = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['吸收投资收到的现金', '筹资活动 +'],
+			td_colors=[Cons.COLOR_GREEN, Cons.COLOR_GREEN],
+			num_forms='xjllbs',
+			num_prop='invrececash',
+			den_forms='xjllbs',
+			den_prop='fincashinfl',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以筹资活动现金流入小计')
 
 		# 其中：子公司吸收少数股东投资收到的现金
-		html_str += '<tr>\n\t<td>其中：子公司吸收少数股东投资收到的现金</td>\n\t<td>筹资活动 +</td>\n'
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.subsrececash:
-				val = xb.subsrececash
-			else:
-				val = 0.0
-			xb.subsrececash = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['其中：子公司吸收少数股东投资收到的现金', ''],
+			td_colors=[Cons.COLOR_WHITE, Cons.COLOR_WHITE],
+			num_forms='xjllbs',
+			num_prop='subsrececash',
+			den_forms='xjllbs',
+			den_prop='invrececash',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以吸收投资收到的现金')
 
 		# 取得借款收到的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">取得借款收到的现金</td>\n\t<td style="background: %s; color: #FFFFFF">筹资活动 +</td>\n' % (Cons.COLOR_RED, Cons.COLOR_RED)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.recefromloan:
-				val = xb.recefromloan
-			else:
-				val = 0.0
-			xb.recefromloan = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['取得借款收到的现金', '筹资活动 +'],
+			td_colors=[Cons.COLOR_GREEN, Cons.COLOR_GREEN],
+			num_forms='xjllbs',
+			num_prop='recefromloan',
+			den_forms='xjllbs',
+			den_prop='fincashinfl',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以筹资活动现金流入小计')
 
 		# 发行债券收到的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">发行债券收到的现金</td>\n\t<td style="background: %s; color: #FFFFFF">筹资活动 +</td>\n' % (Cons.COLOR_RED, Cons.COLOR_RED)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.issbdrececash:
-				val = xb.issbdrececash
-			else:
-				val = 0.0
-			xb.issbdrececash = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['发行债券收到的现金', '筹资活动 +'],
+			td_colors=[Cons.COLOR_GREEN, Cons.COLOR_GREEN],
+			num_forms='xjllbs',
+			num_prop='issbdrececash',
+			den_forms='xjllbs',
+			den_prop='fincashinfl',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以筹资活动现金流入小计')
 
 		# 收到其他与筹资活动有关的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">收到其他与筹资活动有关的现金</td>\n\t<td style="background: %s; color: #FFFFFF">筹资活动 +</td>\n' % (Cons.COLOR_RED, Cons.COLOR_RED)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.recefincash:
-				val = xb.recefincash
-			else:
-				val = 0.0
-			xb.recefincash = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['收到其他与筹资活动有关的现金', '筹资活动 +'],
+			td_colors=[Cons.COLOR_GREEN, Cons.COLOR_GREEN],
+			num_forms='xjllbs',
+			num_prop='recefincash',
+			den_forms='xjllbs',
+			den_prop='fincashinfl',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以筹资活动现金流入小计')
 
 		# 筹资活动现金流入小计
-		html_str += '<tr bgcolor="white">\n\t<td>筹资活动现金流入小计</td>\n\t<td>筹资活动 +</td>\n'
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.fincashinfl:
-				val = xb.fincashinfl
-			else:
-				val = 0.0
-			xb.fincashinfl = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['筹资活动现金流入小计', '筹资活动 + ='],
+			td_colors=[Cons.COLOR_GREEN, Cons.COLOR_GREEN],
+			num_forms='xjllbs',
+			num_prop='fincashinfl',
+			den_forms='xjllbs',
+			den_prop='fincashinfl',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以筹资活动现金流入小计')
 
 		# 偿还债务支付的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">偿还债务支付的现金</td>\n\t<td style="background: %s; color: #FFFFFF">筹资活动 -</td>\n' % (Cons.COLOR_RED, Cons.COLOR_RED)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.debtpaycash:
-				val = xb.debtpaycash
-			else:
-				val = 0.0
-			xb.debtpaycash = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['偿还债务支付的现金', '筹资活动 -'],
+			td_colors=[Cons.COLOR_RED, Cons.COLOR_RED],
+			num_forms='xjllbs',
+			num_prop='debtpaycash',
+			den_forms='xjllbs',
+			den_prop='fincashoutf',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以筹资活动现金流出小计')
 
 		# 分配股利、利润或偿付利息所支付的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">分配股利、利润或偿付利息所支付的现金</td>\n\t<td style="background: %s; color: #FFFFFF">筹资活动 -</td>\n' % (Cons.COLOR_RED, Cons.COLOR_RED)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.diviprofpaycash:
-				val = xb.diviprofpaycash
-			else:
-				val = 0.0
-			xb.diviprofpaycash = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['分配股利、利润或偿付利息所支付的现金', '筹资活动 -'],
+			td_colors=[Cons.COLOR_RED, Cons.COLOR_RED],
+			num_forms='xjllbs',
+			num_prop='diviprofpaycash',
+			den_forms='xjllbs',
+			den_prop='fincashoutf',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以筹资活动现金流出小计')
 
 		# 其中：子公司支付给少数股东的股利，利润
-		html_str += '<tr>\n\t<td>其中：子公司支付给少数股东的股利，利润</td>\n\t<td>筹资活动 -</td>\n'
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.subspaydivid:
-				val = xb.subspaydivid
-			else:
-				val = 0.0
-			xb.subspaydivid = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['其中：子公司支付给少数股东的股利，利润', ''],
+			td_colors=[Cons.COLOR_WHITE, Cons.COLOR_WHITE],
+			num_forms='xjllbs',
+			num_prop='subspaydivid',
+			den_forms='xjllbs',
+			den_prop='diviprofpaycash',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以分配股利、利润或偿付利息所支付的现金')
 
 		# 支付其他与筹资活动有关的现金
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">支付其他与筹资活动有关的现金</td>\n\t<td style="background: %s; color: #FFFFFF">筹资活动 -</td>\n' % (Cons.COLOR_RED, Cons.COLOR_RED)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.finrelacash:
-				val = xb.finrelacash
-			else:
-				val = 0.0
-			xb.finrelacash = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['支付其他与筹资活动有关的现金', '筹资活动 -'],
+			td_colors=[Cons.COLOR_RED, Cons.COLOR_RED],
+			num_forms='xjllbs',
+			num_prop='finrelacash',
+			den_forms='xjllbs',
+			den_prop='fincashoutf',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以筹资活动现金流出小计')
 
 		# 筹资活动现金流出小计
-		html_str += '<tr bgcolor="white">\n\t<td>筹资活动现金流出小计</td>\n\t<td>筹资活动 -</td>\n'
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.fincashoutf:
-				val = xb.fincashoutf
-			else:
-				val = 0.0
-			xb.fincashoutf = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['筹资活动现金流出小计', '筹资活动 - ='],
+			td_colors=[Cons.COLOR_RED, Cons.COLOR_RED],
+			num_forms='xjllbs',
+			num_prop='fincashoutf',
+			den_forms='xjllbs',
+			den_prop='fincashoutf',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以筹资活动现金流出小计')
 
 		# 筹资活动产生的现金流量净额
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">筹资活动产生的现金流量净额</td>\n\t<td style="background: %s; color: #FFFFFF">筹资活动</td>\n' % (Cons.COLOR_YELLOW, Cons.COLOR_YELLOW)
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.finnetcflow:
-				val = xb.finnetcflow
-			else:
-				val = 0.0
-			xb.finnetcflow = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['筹资活动产生的现金流量净额', '筹资活动 ='],
+			td_colors=[Cons.COLOR_PURPLE, Cons.COLOR_PURPLE],
+			num_forms='xjllbs',
+			num_prop='finnetcflow',
+			den_forms='xjllbs',
+			den_prop='cashnetr',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以现金及现金等价物净增加额')
 
 		# 权益性筹资的发行价
-		html_str += '<tr bgcolor="white">\n\t<td>权益性筹资的发行价</td>\n\t<td></td>\n'
-		for k in keys:
-			if not k in self.stock.fjsjs:
-				fj = FJSJ()
-			else:
-				fj = self.stock.fjsjs[k]
-
-			if fj.equfinpubpri:
-				val = fj.equfinpubpri
-			else:
-				val = 0.0
-			fj.equfinpubpri = val
-			html_str += '\t<td>%.2f</td>\n\t<td></td>\n' % (val)
-		html_str += '</tr>\n'
+		self.comdrawer.add_num_table_line(
+			two_tds=['权益性筹资的发行价', ''],
+			td_colors=[Cons.COLOR_PINK, Cons.COLOR_WHITE],
+			forms='fjsjs',
+			prop='equfinpubpri',
+			unit='元',
+			last_td='')
 
 		# 债务性筹资的利率
-		html_str += '<tr bgcolor="white">\n\t<td>债务性筹资的利率</td>\n\t<td></td>\n'
-		for k in keys:
-			if not k in self.stock.fjsjs:
-				fj = FJSJ()
-			else:
-				fj = self.stock.fjsjs[k]
-
-			if fj.debtfininrate:
-				val = fj.debtfininrate
-			else:
-				val = 0.0
-			fj.debtfininrate = val
-			html_str += '\t<td>%.2f%%</td>\n\t<td></td>\n' % (val)
-		html_str += '</tr>\n'
+		self.comdrawer.add_num_table_line(
+			two_tds=['债务性筹资的利率', ''],
+			td_colors=[Cons.COLOR_PINK, Cons.COLOR_WHITE],
+			forms='fjsjs',
+			prop='debtfininrate',
+			unit=Cons.Percent,
+			last_td='')
 
 		# 四、汇总
 
 		# 汇率变动对现金及现金等价物的影响
-		html_str += '<tr bgcolor="white">\n\t<td>汇率变动对现金及现金等价物的影响</td>\n\t<td></td>\n'
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.chgexchgchgs:
-				val = xb.chgexchgchgs
-			else:
-				val = 0.0
-			xb.chgexchgchgs = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['汇率变动对现金及现金等价物的影响', ''],
+			td_colors=[Cons.COLOR_PURPLE, Cons.COLOR_WHITE],
+			num_forms='xjllbs',
+			num_prop='chgexchgchgs',
+			den_forms='xjllbs',
+			den_prop='cashnetr',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以现金及现金等价物净增加额')
 
 		# 现金及现金等价物净增加额
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">现金及现金等价物净增加额</td>\n\t<td></td>\n' % Cons.COLOR_PURPLE
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.cashnetr:
-				val = xb.cashnetr
-			else:
-				val = 0.0
-			xb.cashnetr = val
-
-			if val >= 1:
-				color = Cons.COLOR_GREEN
-			else:
-				color = Cons.COLOR_RED
-			html_str += '\t<td style="background: %s; color: #FFFFFF">%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (color, val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['现金及现金等价物净增加额', '+'],
+			td_colors=[Cons.COLOR_PURPLE, Cons.COLOR_PURPLE],
+			num_forms='xjllbs',
+			num_prop='cashnetr',
+			den_forms='xjllbs',
+			den_prop='finalcashbala',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以期末现金及现金等价物余额',
+			dividedval_color_map_func=Cons.rateover0_color_map_func)
 
 		# 期初现金及现金等价物余额
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">期初现金及现金等价物余额</td>\n\t<td></td>\n' % Cons.COLOR_PURPLE
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.inicashbala:
-				val = xb.inicashbala
-			else:
-				val = 0.0
-			xb.inicashbala = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['期初现金及现金等价物余额', '='],
+			td_colors=[Cons.COLOR_PURPLE, Cons.COLOR_PURPLE],
+			num_forms='xjllbs',
+			num_prop='inicashbala',
+			den_forms='xjllbs',
+			den_prop='finalcashbala',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以期末现金及现金等价物余额')
 
 		# 期末现金及现金等价物余额
-		html_str += '<tr>\n\t<td style="background: %s; color: #FFFFFF">期末现金及现金等价物余额</td>\n\t<td></td>\n' % Cons.COLOR_PURPLE
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.finalcashbala:
-				val = xb.finalcashbala
-			else:
-				val = 0.0
-			xb.finalcashbala = val
-			html_str += '\t<td>%.2f亿</td>\n\t<td>%.2f%%</td>\n' % (val / Cons.Yi, 0)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['期末现金及现金等价物余额', '='],
+			td_colors=[Cons.COLOR_PURPLE, Cons.COLOR_PURPLE],
+			num_forms='xjllbs',
+			num_prop='finalcashbala',
+			den_forms='xjllbs',
+			den_prop='finalcashbala',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以期末现金及现金等价物余额')
 
 		# 期末现金及现金等价物余额 / 有息负债
-		html_str += '<tr bgcolor="white">\n\t<td>期末现金及现金等价物余额 / 有息负债</td>\n\t<td></td>\n'
-		for k in keys:
-			zb = self.stock.zcfzbs[k]
-			xb = self.stock.xjllbs[k]
-
-			borr = zb.shorttermborr + zb.longborr
-			if borr == 0:
-				val = 0
-			else:
-				val = xb.finalcashbala / borr
-			html_str += '\t<td>%.2f</td>\n\t<td></td>\n' % (val)
-		html_str += '</tr>\n'
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['期末现金及现金等价物余额 / 有息负债', ''],
+			td_colors=[Cons.COLOR_PINK, Cons.COLOR_WHITE],
+			num_forms='xjllbs',
+			num_prop='finalcashbala',
+			den_forms='zcfzbs',
+			den_prop='borrtot',
+			two_units=[None, None],
+			last_td='',
+			only_dividedval_column=True,
+			dividedval_color_map_func=Cons.valover1_oris0_color_map_func)
 
 		# 期末现金及现金等价物余额 + 应收票据中的银行承兑汇票 > 有息负债
-		html_str += '<tr bgcolor="white">\n\t<td>期末现金及现金等价物余额 + 应收票据中的银行承兑汇票 / 有息负债</td>\n\t<td></td>\n'
-		for k in keys:
-			zb = self.stock.zcfzbs[k]
-			xb = self.stock.xjllbs[k]
-			if not k in self.stock.fjsjs:
-				fj = FJSJ()
-			else:
-				fj = self.stock.fjsjs[k]
-
-			borr = zb.shorttermborr + zb.longborr
-			if borr == 0:
-				val = 0
-			else:
-				val = (xb.finalcashbala + fj.notesrece_bank) / borr
-			html_str += '\t<td>%.2f</td>\n\t<td></td>\n' % (val)
-		html_str += '</tr>\n'
-
-		# 加权平均净资产现金回收率 = 经营现金流净额 / 平均净资产
-		html_str += '<tr bgcolor="white">\n\t<td>加权平均净资产现金回收率</td>\n\t<td></td>\n'
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-
-			zb_cur = self.stock.zcfzbs[k]
-			k1 = '%s' % (int(k) - 1)
-			if k1 in self.stock.zcfzbs:
-				zb_lst = self.stock.zcfzbs[k1]
-				righaggr = (zb_cur.righaggr + zb_lst.righaggr) / 2
-			else:
-				righaggr = zb_cur.righaggr
-
-			val = xb.mananetr / righaggr * 100
-			html_str += '\t<td>%.2f%%</td>\n\t<td></td>\n' % (val)
-		html_str += '<td>经营现金流净额 / 平均净资产</td></tr>\n'
-
-		# 加权平均总资产现金回收率 = 经营现金流净额 / 平均总资产
-		html_str += '<tr bgcolor="white">\n\t<td>加权平均总资产现金回收率</td>\n\t<td></td>\n'
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-
-			zb_cur = self.stock.zcfzbs[k]
-			k1 = '%s' % (int(k) - 1)
-			if k1 in self.stock.zcfzbs:
-				zb_lst = self.stock.zcfzbs[k1]
-				totassetave = (zb_cur.totasset + zb_lst.totasset) / 2
-			else:
-				totassetave = zb_cur.totasset
-
-			val = xb.mananetr / totassetave * 100
-			html_str += '\t<td>%.2f%%</td>\n\t<td></td>\n' % (val)
-		html_str += '<td>经营现金流净额 / 平均总资产</td></tr>\n'
-
-		# 简化的自由现金流 = 经营现金流净额 - 投资活动现金流出净额
-		html_str += '<tr>\n\t<td>简化的自由现金流</td>\n\t<td></td>\n'
-		for k in keys:
-			xb = self.stock.xjllbs[k]
-			if xb.invnetcashflow < 0:
-				outflow = -xb.invnetcashflow
-			else:
-				outflow = 0
-			val = xb.mananetr - outflow
-			if val > 0:
+		self.comdrawer.html_util.add_table_body_td(td='(期末现金及现金等价物余额 + 应收票据中的银行承兑汇票) / 有息负债', color=Cons.COLOR_PINK)
+		self.comdrawer.html_util.add_table_body_td(td='', color=Cons.COLOR_WHITE)
+		for k in self.comdrawer.keys:
+			keypath1 = 'xjllbs[%s].finalcashbala' % k
+			keypath2 = 'fjsjs[%s].notesrece_bank' % k
+			keypath3 = 'zcfzbs[%s].borrtot' % k
+			val1 = StockUtil.numValueForKeyPath(stock=self.comdrawer.stock, keypath=keypath1)
+			val2 = StockUtil.numValueForKeyPath(stock=self.comdrawer.stock, keypath=keypath2)
+			val3 = StockUtil.numValueForKeyPath(stock=self.comdrawer.stock, keypath=keypath3)
+			numval = val1 + val2
+			denval = val3
+			rate = StockUtil.getDivideVal(num=numval, den=denval, use_percent_format=False)
+			if numval >= denval:
 				color = Cons.COLOR_GREEN
 			else:
 				color = Cons.COLOR_RED
-			html_str += '\t<td style="background: %s; color: #FFFFFF">%.2f亿</td>\n\t<td></td>\n' % (color, val / Cons.Yi)
-		html_str += '<td>经营现金流净额 - 投资活动现金流出净额</td></tr>\n'
+			self.comdrawer.html_util.add_table_body_td_val(val=rate, color=color, unit=Cons.Percent)
+			self.comdrawer.html_util.add_table_body_td_empty()
+		self.comdrawer.html_util.add_table_body_td(td='', color=Cons.COLOR_WHITE)
+		self.comdrawer.html_util.add_table_body_tr_end()
+
+		# 加权平均净资产现金回收率 = 经营现金流净额 / 平均净资产
+		self.comdrawer.add_weightedave_dividedval_table_line(
+			two_tds=['加权平均净资产现金回收率', ''],
+			td_colors=[Cons.COLOR_PINK, Cons.COLOR_WHITE],
+			num_forms='xjllbs',
+			num_prop='mananetr',
+			den_forms='zcfzbs',
+			den_prop='righaggr',
+			two_units=[Cons.Percent, None],
+			last_td='加权平均净资产现金回收率 = 经营现金流净额 / 平均净资产',
+			func=None,
+			color_map_func=None)
+
+		# 加权平均总资产现金回收率 = 经营现金流净额 / 平均总资产
+		self.comdrawer.add_weightedave_dividedval_table_line(
+			two_tds=['加权平均总资产现金回收率', ''],
+			td_colors=[Cons.COLOR_PINK, Cons.COLOR_WHITE],
+			num_forms='xjllbs',
+			num_prop='mananetr',
+			den_forms='zcfzbs',
+			den_prop='totasset',
+			two_units=[Cons.Percent, None],
+			last_td='加权平均总资产现金回收率 = 经营现金流净额 / 平均总资产',
+			func=None,
+			color_map_func=None)
+
+		# 简化的自由现金流 = 经营现金流净额 - 投资活动现金流出净额
+		self.comdrawer.add_num_table_line(
+			two_tds=['简化的自由现金流', ''],
+			td_colors=[Cons.COLOR_PINK, Cons.COLOR_WHITE],
+			forms='xjllbs',
+			prop='simfreecashflow',
+			unit=Cons.Yi,
+			last_td='简化的自由现金流 = 经营现金流净额 - 投资活动现金流出净额',
+			val_color_map_func=Cons.valover0_map_func)
 
 		# 所属类型(奶牛/母鸡/蛮牛等)
-		html_str += '<tr>\n\t<td>所属类型</td>\n\t<td></td>\n'
-		for k in keys:
-			xb = self.stock.xjllbs[k]
+		self.comdrawer.html_util.add_table_body_td(td='所属类型(奶牛/母鸡/蛮牛等)', color=Cons.COLOR_PURPLE)
+		self.comdrawer.html_util.add_table_body_td(td='', color=Cons.COLOR_WHITE)
+		for k in self.comdrawer.keys:
+			xb = self.comdrawer.stock.xjllbs[k]
 
 			A = xb.mananetr > 0
 			B = xb.invnetcashflow > 0
@@ -716,12 +638,11 @@ class CashDrawer(object):
 			elif not A and not B and not C:
 				val = '大出血型'
 				color = Cons.COLOR_RED
-			html_str += '\t<td style="background: %s; color: #FFFFFF">%s</td>\n\t<td></td>\n' % (color, val)
-		html_str += '</tr>\n'
-		
-		# 表尾
-		html_str += '</tbody>\n</table>\n\n</body>\n</html>'
+			
+			self.comdrawer.html_util.add_table_body_td(td=val, color=color)
+			self.comdrawer.html_util.add_table_body_td_empty()
+		self.comdrawer.html_util.add_table_body_td(td='', color=Cons.COLOR_WHITE)
+		self.comdrawer.html_util.add_table_body_tr_end()
 
-		# print html_str
-		fname = 'db/%s_%s/现金流量表.html' % (self.stock.symbol, self.stock.name)
-		ResUtil.save_html_content(html_str, fname)
+		self.comdrawer.add_table_end()
+		self.comdrawer.add_end_and_save_to_stock_file(fname='现金流量表')

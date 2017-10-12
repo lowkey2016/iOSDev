@@ -59,6 +59,9 @@ class StockUtil(object):
 			return 0
 		else:
 			val = float(val_cur) / val_lst
+			if val < 0:
+				return 0
+
 			rate = math.pow(val, 1. / years) - 1
 			if use_percent_format:
 				return rate * 100
