@@ -17,7 +17,7 @@ class FJSJDrawer(object):
 		self.comdrawer = CommonDrawer(stock=stock, keys=keys)
 
 	def draw(self):
-		self.comdrawer.add_start()
+		self.comdrawer.add_start(title='附加数据')
 
 		# 标题部分
 		self.comdrawer.html_util.add_title(title='附加数据')

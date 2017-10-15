@@ -11,9 +11,11 @@ from utils.util_html import HTMLUtil
 import utils.util_cons as Cons
 
 class GroupDrawer(object):
-	def __init__(self, stocks_group, target):
+	def __init__(self, industry, stocks_group, target):
+		assert len(industry) > 0
 		if stocks_group is None or len(stocks_group) == 0:
 			return
+		self.industry = industry
 		self.stocks_group = stocks_group
 		self.target = target
 		self.margin_up = 0.5
@@ -26,7 +28,7 @@ class GroupDrawer(object):
 		keys.reverse()
 
 		html_util = HTMLUtil()
-		html_util.add_start()
+		html_util.add_start(title=self.industry)
 		self.draw_curfds_quaility(html_util, keys)
 		self.draw_accorece_quality(html_util, keys)
 		self.draw_inve_quality(html_util, keys)
@@ -40,7 +42,7 @@ class GroupDrawer(object):
 		self.draw_managers_quality(html_util, keys)
 		self.draw_roe_quality(html_util, keys)
 		html_util.add_end()
-		html_util.save_to_file('厨电行业综合对比')
+		html_util.save_to_file(self.industry)
 
 	def add_divideval_table(self, html_util, keys, caption, three_tds, last_td, num_forms, num_property, den_forms, den_property, func, units, decending):
 		assert len(three_tds) == 3
@@ -741,6 +743,21 @@ class GroupDrawer(object):
 			units=[None, Cons.Yi, Cons.Percent],
 			decending=False)
 
+		# 净利润 / 存货
+		self.add_divideval_table(
+			html_util=html_util,
+			keys=keys,
+			caption='净利润 / 存货',
+			three_tds=['企业', '存货总额', '净利润 / 存货'],
+			last_td='从高到低排序；行业均值规则',
+			num_forms='gslrbs',
+			num_property='netprofit',
+			den_forms='zcfzbs',
+			den_property='inve',
+			func=None,
+			units=[None, Cons.Yi, None],
+			decending=True)
+
 		# 存货增幅/营业成本增幅
 		# 超过行业均值 margin_up 和低于行业均值 margin_down 的都要标红色
 		self.add_growrate_table(
@@ -757,7 +774,20 @@ class GroupDrawer(object):
 
 		# 销产比
 		# 行业均值规则
-		inve_unit = StockUtil.get_inve_unit(stocks_group=self.stocks_group)
+		tmp_stocks_info = {}
+		for stk in self.stocks_group:
+			inve_unit = StockUtil.get_inve_unit_from_stock(stk)
+			if inve_unit and len(inve_unit) > 0:
+				if not inve_unit in tmp_stocks_info:
+					tmp_stocks_info[inve_unit] = 0
+				else:
+					tmp_stocks_info[inve_unit] += 1
+		inve_unit = ''
+		maxcount = 0
+		for unit, cnt in tmp_stocks_info.iteritems():
+			if cnt >= maxcount:
+				inve_unit = unit
+				maxcount = cnt
 		self.add_divideval_table(
 			html_util=html_util,
 			keys=keys,

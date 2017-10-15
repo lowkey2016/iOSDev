@@ -17,9 +17,10 @@ class CommonDrawer(object):
 		self.html_util = HTMLUtil()
 		self.keys = keys
 
-	def add_start(self):
+	def add_start(self, title):
+		title = '%s %s' % (self.stock.name, title)
 		html_util = self.html_util
-		html_util.add_start()
+		html_util.add_start(title=title)
 
 	def add_title_and_table_head(self, title, caption, two_ths):
 		html_util = self.html_util

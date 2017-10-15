@@ -19,7 +19,7 @@ class AssetsDrawer(object):
 		self.comdrawer = CommonDrawer(stock=stock, keys=keys)
 
 	def draw(self):
-		self.comdrawer.add_start()
+		self.comdrawer.add_start(title='资产部分')
 
 		# 标题部分
 		self.comdrawer.add_title_and_table_head(
@@ -502,6 +502,19 @@ class AssetsDrawer(object):
 			last_td='除以营业成本',
 			only_dividedval_column=True)
 
+		# 净利润 / 存货
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['净利润 / 存货', ''],
+			td_colors=[Cons.COLOR_WHITE, Cons.COLOR_WHITE],
+			num_forms='gslrbs',
+			num_prop='netprofit',
+			den_forms='zcfzbs',
+			den_prop='inve',
+			two_units=[None, None],
+			last_td='',
+			only_dividedval_column=True,
+			dividedval_color_map_func=Cons.valover1_color_map_func)
+
 		# 存货跌价计提标准
 		self.comdrawer.add_str_table_line(
 			two_tds=['存货跌价计提标准', ''],
@@ -538,7 +551,7 @@ class AssetsDrawer(object):
 			last_td='')
 
 		# 存货产量
-		inve_unit = StockUtil.get_inve_unit(stocks_group=[self.stock])
+		inve_unit = StockUtil.get_inve_unit_from_stock(stock=self.comdrawer.stock)
 		self.comdrawer.add_val_growrate_comprate_table_lines(
 			two_tds=['存货产量', '经营相关资产'],
 			td_colors=[Cons.COLOR_WHITE, Cons.COLOR_WHITE],
@@ -568,19 +581,19 @@ class AssetsDrawer(object):
 			num_prop='inve_sale',
 			den_forms='fjsjs',
 			den_prop='inve_prod',
-			two_units=[Cons.Percent, None],
+			two_units=[None, None],
 			last_td='除以存货产量',
 			only_dividedval_column=True)
 
 		# 销产存比
 		self.comdrawer.add_dividedval_table_line(
-			two_tds=['销产比', ''],
+			two_tds=['销产存比', ''],
 			td_colors=[Cons.COLOR_WHITE, Cons.COLOR_WHITE],
 			num_forms='fjsjs',
 			num_prop='inve_sale',
 			den_forms='fjsjs',
 			den_prop='inve_prodandsave',
-			two_units=[Cons.Percent, None],
+			two_units=[None, None],
 			last_td='除以存货产量和存量之和',
 			only_dividedval_column=True)
 

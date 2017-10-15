@@ -88,7 +88,7 @@ class AnlzMgr(object):
 		anlz_mgr.draw()
 		group.append(stk)
 
-		gdrawer = GroupDrawer(stocks_group=group, target=target)
+		gdrawer = GroupDrawer(industry=Cons.INDUSTRY_ELETRIC_KITCHEN, stocks_group=group, target=target)
 		gdrawer.draw()
 
 	@classmethod

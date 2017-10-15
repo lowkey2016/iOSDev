@@ -19,6 +19,8 @@ COLOR_YELLOW = '#FFB86C'
 COLOR_BLUE = '#2E68AA'
 COLOR_PURPLE = '#8F1D78'
 
+INDUSTRY_ELETRIC_KITCHEN = '厨电行业'
+
 def roe_color_map_func(val):
 		compval = 15
 		val *= 100
@@ -44,6 +46,12 @@ def rateover0_color_map_func(val):
 
 def valover1_oris0_color_map_func(val):
 	if val >= 1 or val == 0:
+		return COLOR_GREEN
+	else:
+		return COLOR_RED
+
+def valover1_color_map_func(val):
+	if val >= 1:
 		return COLOR_GREEN
 	else:
 		return COLOR_RED

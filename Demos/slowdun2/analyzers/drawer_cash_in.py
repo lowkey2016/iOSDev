@@ -18,7 +18,7 @@ class CashInDrawer(object):
 		self.comdrawer = CommonDrawer(stock=stock, keys=keys)
 
 	def draw(self):
-		self.comdrawer.add_start()
+		self.comdrawer.add_start(title='现金流量表间接法')
 
 		# 标题部分
 		self.comdrawer.add_title_and_table_head(

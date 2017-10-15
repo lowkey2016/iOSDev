@@ -308,3 +308,10 @@ class StockUtil(object):
 			if '2016' in stk.fjsjs.keys():
 				inve_unit = stk.fjsjs['2016'].inve_unit
 		return inve_unit
+
+	@classmethod
+	def get_inve_unit_from_stock(self, stock):
+		inve_unit = ''
+		if '2016' in stock.fjsjs.keys():
+			inve_unit = stock.fjsjs['2016'].inve_unit
+		return inve_unit

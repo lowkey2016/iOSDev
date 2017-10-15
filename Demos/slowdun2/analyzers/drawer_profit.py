@@ -18,7 +18,7 @@ class ProfitDrawer(object):
 		self.comdrawer = CommonDrawer(stock=stock, keys=keys)
 
 	def draw(self):
-		self.comdrawer.add_start()
+		self.comdrawer.add_start(title='利润表')
 
 		# 标题部分
 		self.comdrawer.add_title_and_table_head(

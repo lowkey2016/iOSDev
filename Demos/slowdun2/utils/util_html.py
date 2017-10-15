@@ -7,7 +7,7 @@ class HTMLUtil(object):
 	def __init__(self):
 		self.html_str = ''
 
-	def add_start(self):
+	def add_start(self, title):
 		self.html_str += """
 		<html>
 		<head>
@@ -16,10 +16,12 @@ class HTMLUtil(object):
 		<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 		<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<style>tbody tr:first-child td:nth-child(1), tbody tr:first-child td:nth-child(2) { white-space: nowrap; } thead tr:first-child th:last-child { white-space: nowrap; padding: 5px 50px; }</style>
+		
+		<title>%s</title>
 		</head>
 
 		<body>
-		"""
+		""" % title
 
 	def add_title(self, title):
 		self.html_str += '<h4>%s</h4>' % title
