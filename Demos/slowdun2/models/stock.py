@@ -5,6 +5,7 @@ from zcfzb import ZCFZB
 from gslrb import GSLRB
 from xjllb import XJLLB
 from fjsj import FJSJ
+from quote import QUOTE
 from utils.util_res import ResUtil
 import utils.util_cons as Cons
 
@@ -93,3 +94,19 @@ class Stock(object):
 		else:
 			self.fjsjs = {}
 			# print self.fjsjs
+
+		# 解析最新数据
+		fname = '%s/quote.json' % st_dir
+		if ResUtil.is_file_exists(fname):
+			json_data = json.loads(ResUtil.read_json(fname))
+		else:
+			json_data = None
+		if json_data is not None and type(json_data) == type({}) and json_data[symbol] is not None:
+			des_dics = {}
+			dic = json_data[symbol]
+			if symbol == dic['symbol']:
+				tmp = QUOTE(**dic)
+				self.quote = tmp
+			else:
+				self.quote = None
+			# print self.quote

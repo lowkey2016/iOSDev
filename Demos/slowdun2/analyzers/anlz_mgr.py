@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-from models.zcfzb import ZCFZB
-from models.gslrb import GSLRB
-from models.xjllb import XJLLB
-from models.fjsj import FJSJ
 from models.stock import Stock
 from utils.util_res import ResUtil
 import utils.util_cons as Cons
@@ -14,6 +10,7 @@ from drawer_profit import ProfitDrawer
 from drawer_cash import CashDrawer
 from drawer_cash_in import CashInDrawer
 from drawer_fjsj import FJSJDrawer
+from drawer_quote import QuoteDrawer
 from drawer_group import GroupDrawer
 
 class AnlzMgr(object):
@@ -39,6 +36,7 @@ class AnlzMgr(object):
 		self.cashDrawer = CashDrawer(stock=stock)
 		self.cashinDrawer = CashInDrawer(stock=stock)
 		self.fjsjDrawer = FJSJDrawer(stock=stock)
+		self.quoteDrawer = QuoteDrawer(stock=stock)
 
 	def draw(self):
 		self.assetsDrawer.draw()
@@ -47,6 +45,7 @@ class AnlzMgr(object):
 		self.cashDrawer.draw()
 		self.cashinDrawer.draw()
 		self.fjsjDrawer.draw()
+		self.quoteDrawer.draw()
 
 	@classmethod
 	def draw_jiadian_chudians(self):

@@ -150,6 +150,3 @@ class ZCFZB(object):
         self.curassetvalue = self.totcurrasset - self.totliab
         # 现金资产价值 = 现金资产 - 总负债
         self.curfdsvalue = self.curfds - self.totliab
-
-        # 资本结构 = 股票市值 / 资本总市值，其中：资本总市值 = 股票市值 + 总负债 + 优先股市值（如果有优先股），格雷厄姆标准：比例很高的是保守型，很低的是投机型，适中的是最优型
-        # self.capstruct

@@ -70,7 +70,7 @@ class ReqUtil(object):
 		elif ReqUtil.REP_TYPE_ASSETS == report_type:
 			url = "https://xueqiu.com/stock/f10/balsheet.json?symbol=%s&page=1&size=%d&_=%d" % (self.st_symbol, size, now)
 		elif ReqUtil.REP_TYPE_CUR == report_type:
-			url = "https://xueqiu.com/v4/stock/quote.json?code=%s&_=%d" % (st_symbol, now)
+			url = "https://xueqiu.com/v4/stock/quote.json?code=%s&_=%d" % (self.st_symbol, now)
 		elif ReqUtil.REP_TYPE_FEEDBACK == report_type:
 			url = "https://xueqiu.com/stock/f10/bonus.json?symbol=%s&page=1&size=%d&_=%d" % (self.st_symbol, size, now)
 		elif ReqUtil.REP_TYPE_CASH == report_type:
@@ -83,21 +83,3 @@ class ReqUtil(object):
 	def prepare(self):
 		url = "https://xueqiu.com/S/%s" % self.st_symbol
 		return self.send(url, {}, None)
-
-		# request = urllib2.Request(url)
-		# request.add_header('User-Agent', g_ua)
-		# request.add_header('Cookie', g_cookie)
-		# response = urllib2.urlopen(request)
-		# dic = json.loads(response.read())
-		# if REP_TYPE_CUR == report_type:
-		# 	dat = dic[st_symbol]
-		# 	return dat
-		# else:
-		# 	dat_list = dic["list"]
-		# 	if assert_if_size_err:
-		# 		assert size == len(dat_list)
-		# 	des_list = []
-		# 	for i, el in enumerate(dat_list):
-		# 		if 0 == i or (1 == (i + 1 - months_from_2017) % 4):
-		# 			des_list.append(el)
-		# 	return des_list

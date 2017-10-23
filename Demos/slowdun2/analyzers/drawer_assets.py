@@ -1189,7 +1189,7 @@ class AssetsDrawer(object):
 			forms='zcfzbs',
 			prop='curassetvalue',
 			unit=Cons.Yi,
-			last_td='流动资产价值 = 流动资产 - 总负债')
+			last_td='流动资产价值 = 流动资产 - 总负债；格雷厄姆标准：股票价格低于流动资产价值（流动资产减总负债）的 2/3')
 
         # 现金资产价值 = 现金资产 - 总负债
 		self.comdrawer.add_num_table_line(

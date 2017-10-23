@@ -44,6 +44,13 @@ class ResUtil(object):
 		return file_path
 
 	@classmethod
+	def get_quote_file_path(self, st_symbol):
+		ResUtil.create_dir_if_needed(st_symbol)
+		dirpath = ResUtil.get_file_path(st_symbol)
+		file_path = "%s/quote.json" % dirpath
+		return file_path
+
+	@classmethod
 	def is_file_exists(self, fname):
 		fpath  = ResUtil.get_file_path(fname)
 		return os.path.exists(fpath)
