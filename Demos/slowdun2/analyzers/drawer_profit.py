@@ -4,6 +4,7 @@ from models.gslrb import GSLRB
 from models.fjsj import FJSJ
 from models.stock import Stock
 import utils.util_cons as Cons
+from utils.util_stock import StockUtil
 from drawer_common import CommonDrawer
 
 class ProfitDrawer(object):
@@ -298,8 +299,8 @@ class ProfitDrawer(object):
 
 		# 资产减值损失
 		self.comdrawer.add_dividedval_table_line(
-			two_tds=['资产减值损失', '-'],
-			td_colors=[Cons.COLOR_RED, Cons.COLOR_RED],
+			two_tds=['资产减值损失', '+'],
+			td_colors=[Cons.COLOR_GREEN, Cons.COLOR_GREEN],
 			num_forms='gslrbs',
 			num_prop='asseimpaloss',
 			den_forms='gslrbs',
@@ -410,8 +411,8 @@ class ProfitDrawer(object):
 
 		# 非流动资产处置损失
 		self.comdrawer.add_dividedval_table_line(
-			two_tds=['非流动资产处置损失', '-'],
-			td_colors=[Cons.COLOR_RED, Cons.COLOR_RED],
+			two_tds=['非流动资产处置损失', '+'],
+			td_colors=[Cons.COLOR_GREEN, Cons.COLOR_GREEN],
 			num_forms='gslrbs',
 			num_prop='noncassetsdisl',
 			den_forms='gslrbs',
@@ -441,7 +442,8 @@ class ProfitDrawer(object):
 			den_forms='gslrbs',
 			den_prop='totprofit',
 			two_units=[Cons.Yi, Cons.Percent],
-			last_td='除以利润总额；后面的是所得税率')
+			last_td='除以利润总额；后面的是所得税率；如果所得税率超过或低于历史平均水平 30% 就标红色，否则标绿色',
+			dividedval_color_map_func=Cons.FUNC_compto_historyave_margins_color_map_func)
 
 		# 净利润
 		self.comdrawer.add_val_growrate_comprate_table_lines(
@@ -453,6 +455,48 @@ class ProfitDrawer(object):
 			den_prop='biztotinco',
 			two_units=[Cons.Yi, Cons.Percent],
 			last_td='除以营业总收入；后面的是净利率')
+
+		# 现金分红率 和 留存收益 / 股东权益年度变化值
+		# 留存收益 = 本年度的股东权益 - 去年的股东权益
+		# 本年度的盈余公积 + 本年度的未分配利润 - 去年的盈余公积 - 去年的未分配利润 = 净利润 - 分配给股东的现金分红 = 留存收益
+		self.comdrawer.html_util.add_table_body_td('留存收益 / 股东权益年度变化值 和 现金分红率', color=Cons.COLOR_WHITE)
+		self.comdrawer.html_util.add_table_body_td('', color=Cons.COLOR_WHITE)
+		for k in self.comdrawer.keys:
+			netprofitkeypath = '%s[%s].%s' % ('gslrbs', k, 'netprofit')
+			reseandundiprofkeypath1 = '%s[%s].%s' % ('zcfzbs', k, 'reseandundiprof')
+			reseandundiprofkeypath0 = '%s[%d].%s' % ('zcfzbs', int(k) - 1, 'reseandundiprof')
+			righaggr1 = '%s[%s].%s' % ('zcfzbs', k, 'righaggr')
+			righaggr0 = '%s[%d].%s' % ('zcfzbs', int(k) - 1, 'righaggr')
+
+			netprofit = StockUtil.numValueForKeyPath(stock=self.stock, keypath=netprofitkeypath)
+			reseandundiprof_cur = StockUtil.numValueForKeyPath(stock=self.stock, keypath=reseandundiprofkeypath1)
+			reseandundiprof_lst = StockUtil.numValueForKeyPath(stock=self.stock, keypath=reseandundiprofkeypath0)
+			righaggr_cur = StockUtil.numValueForKeyPath(stock=self.stock, keypath=righaggr1)
+			righaggr_lst = StockUtil.numValueForKeyPath(stock=self.stock, keypath=righaggr0)
+			savedprofit = reseandundiprof_cur - reseandundiprof_lst # 留存收益
+			if righaggr_lst == 0:
+				righaggr_val = 0
+				cashbonus = 0
+			else:
+				righaggr_val = righaggr_cur - righaggr_lst # 股东权益年度变化值
+				cashbonus = netprofit - savedprofit # 现金分红
+			
+			# 现金分红率 = 现金分红 / 净利润
+			cashbonusrate = StockUtil.getDivideVal(num=cashbonus, den=netprofit, use_percent_format=False)
+
+			# 留存收益 / 股东权益年度变化值
+			rate = StockUtil.getDivideVal(num=savedprofit, den=righaggr_val, use_percent_format=False)
+			if rate == 0:
+				color = Cons.COLOR_WHITE
+			else:
+				if abs(rate - 1) > 0.05:
+					color = Cons.COLOR_RED
+				else:
+					color = Cons.COLOR_WHITE
+			self.comdrawer.html_util.add_table_body_td_val(val=rate, color=color, unit=None)
+			self.comdrawer.html_util.add_table_body_td_val(val=cashbonusrate, color=Cons.COLOR_WHITE, unit=Cons.Percent)
+		self.comdrawer.html_util.add_table_body_td(td='留存收益 = 本年度的股东权益 - 去年的股东权益；本年度的盈余公积 + 本年度的未分配利润 - 去年的盈余公积 - 去年的未分配利润 = 净利润 - 分配给股东的现金分红 = 留存收益；大于或小于 1 超过 5% 的都标记为红色，需要到所有者权益变动表中查找原因: 例如增发股票导致股本增加了、少数股东权益影响较大等', color=Cons.COLOR_WHITE)
+		self.comdrawer.html_util.add_table_body_tr_end()
 
 		# 归属于母公司所有者的净利润
 		self.comdrawer.add_dividedval_table_line(

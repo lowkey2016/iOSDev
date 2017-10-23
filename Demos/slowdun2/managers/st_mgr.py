@@ -61,3 +61,6 @@ class StMgr(object):
 		self.fetch_data_from_network('SZ002242') # 九阳股份
 		self.fetch_data_from_network('SZ002677') # 浙江美大
 		self.fetch_data_from_network('SZ002403') # 爱仕达
+
+	def fetch_others_from_network(self):
+		self.fetch_data_from_network('SH600298') # 安琪酵母

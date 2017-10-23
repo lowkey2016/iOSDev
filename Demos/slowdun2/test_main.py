@@ -46,6 +46,7 @@ if __name__ == "__main__":
 	# print fjsj.__dict__
 	
 	# st_mgr.fetch_fangdichan_ppp_data_from_network()
-
+	# st_mgr.fetch_others_from_network()
 	AnlzMgr.draw_jiadian_chudians()
-	# AnlzMgr.draw_fangdichan_ppp()
+	AnlzMgr.draw_fangdichan_ppp()
+	# AnlzMgr.draw_others()

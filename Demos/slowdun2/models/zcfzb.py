@@ -64,11 +64,21 @@ class ZCFZB(object):
     othernoncliabi = 0.0 # 其他非流动负债
     totalnoncliab = 0.0 # 非流动负债合计
     totliab = 0.0 # 负债合计
+    righaggr = 0.0 # 所有者权益(或股东权益)合计
+    paidincapi = 0.0 # 实收资本(或股本)
+    capisurp = 0.0 # 资本公积
+    treastk = 0.0 # 减：库存股
+    specrese = 0.0 # 专项储备
+    rese = 0.0 # 盈余公积
+    generiskrese = 0.0 # 一般风险准备
+    unreinveloss = 0.0 # 未确定的投资损失
+    undiprof = 0.0 # 未分配利润
+    topaycashdivi = 0.0 # 拟分配现金股利
+    curtrandiff = 0.0 # 外币报表折算差额
     paresharrigh = 0.0 # 归属于母公司股东权益合计
     minysharrigh = 0.0 # 少数股东权益
-    righaggr = 0.0 # 所有者权益(或股东权益)合计
     totliabsharequi = 0.0 # 负债和所有者权益
-
+    
     @staticmethod
     def as_self(d):
         obj = ZCFZB()
@@ -126,3 +136,20 @@ class ZCFZB(object):
             self.curborrcover = 0.0
         else:
             self.curborrcover = self.curfds / self.borrtot
+
+        # 盈余公积 + 未分配利润
+        self.reseandundiprof = self.rese + self.undiprof
+
+
+        # 格雷厄姆相关指标
+
+        # 清算价值 = (货币资金 + 交易性金融资产) + (应收票据 + 应收账款) * 0.8 + 存货 * 0.6 + (可供出售金融资产 + 持有至到期投资 + 投资性房地产) * 0.5 + (固定资产净额 + 在建工程 + 工程物资) * 0.15 - 总负债
+        self.liquidvalue = (self.curfds + self.tradfinasset) + (self.notesrece + self.accorece) * 0.8 + self.inve * 0.6 + (self.avaisellasse + self.holdinvedue + self.inveprop) * 0.5 + (self.fixedassenet + self.consprog + self.engimate) * 0.15 - self.totliab
+
+        # 流动资产价值 = 流动资产 - 总负债
+        self.curassetvalue = self.totcurrasset - self.totliab
+        # 现金资产价值 = 现金资产 - 总负债
+        self.curfdsvalue = self.curfds - self.totliab
+
+        # 资本结构 = 股票市值 / 资本总市值，其中：资本总市值 = 股票市值 + 总负债 + 优先股市值（如果有优先股），格雷厄姆标准：比例很高的是保守型，很低的是投机型，适中的是最优型
+        # self.capstruct

@@ -71,8 +71,8 @@ class HTMLUtil(object):
 			s = '%.2f' % val
 		self.add_table_body_td(td=s, color=color)
 
-	def add_table_body_td_empty(self):
-		self.add_table_body_td(' ')
+	def add_table_body_td_empty(self, color=Cons.COLOR_WHITE):
+		self.add_table_body_td(td=' ', color=color)
 
 	def add_table_body_tr_end(self):
 		self.html_str += '</tr>'

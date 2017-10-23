@@ -490,6 +490,18 @@ class AssetsDrawer(object):
 			two_units=[None, None],
 			last_td='存货周转率 = 营业成本 / 存货平均余额，其中：存货平均余额 = (期初存货总额 + 期末存货总额) / 2')
 
+		# 存货周转天数 = 360 / 存货周转率
+		self.comdrawer.add_weightedave_dividedval_table_line(
+			two_tds=['存货周转天数', ''],
+			td_colors=[Cons.COLOR_WHITE, Cons.COLOR_WHITE],
+			num_forms='gslrbs',
+			num_prop='bizcost',
+			den_forms='zcfzbs',
+			den_prop='inve',
+			two_units=['天', None],
+			last_td='存货周转天数 = 360 / 存货周转率',
+			func=Cons.divideby_360_func)
+
 		# 存货 / 营业成本
 		self.comdrawer.add_dividedval_table_line(
 			two_tds=['存货 / 营业成本', ''],
@@ -1085,6 +1097,22 @@ class AssetsDrawer(object):
 			two_units=[Cons.Yi, Cons.Percent],
 			last_td='')
 
+		# 归属于母公司股东权益合计
+		self.comdrawer.add_val_growrate_comprate_table_lines(
+			two_tds=['归属于母公司股东权益合计', ''],
+			td_colors=[Cons.COLOR_PURPLE, Cons.COLOR_WHITE],
+			num_forms='zcfzbs',
+			num_prop='paresharrigh',
+			den_forms='zcfzbs',
+			den_prop='righaggr',
+			two_units=[Cons.Yi, Cons.Percent],
+			last_td='除以所有者权益合计')
+
+		self.comdrawer.add_capital_table_line(
+			td='格雷厄姆指标',
+			td_color=Cons.COLOR_PURPLE,
+			last_td='')
+
 		# 流动比率 = 流动资产 / 流动负债
 		self.comdrawer.add_dividedval_table_line(
 			two_tds=['流动比率', ''],
@@ -1094,10 +1122,10 @@ class AssetsDrawer(object):
 			den_forms='zcfzbs',
 			den_prop='totalcurrliab',
 			two_units=[None, None],
-			last_td='流动比率 = 流动资产 / 流动负债',
+			last_td='流动比率 = 流动资产 / 流动负债；格雷厄姆标准 >= 2',
 			only_dividedval_column=True)
 
-		# 速动比率 = 速动资产 / 流动负债，其中速动资产  = 流动资产 - 存货
+		# 速动比率 = 速动资产 / 流动负债，其中速动资产 = 流动资产 - 存货
 		self.comdrawer.add_dividedval_table_line(
 			two_tds=['速动比率', ''],
 			td_colors=[Cons.COLOR_WHITE, Cons.COLOR_WHITE],
@@ -1106,7 +1134,7 @@ class AssetsDrawer(object):
 			den_forms='zcfzbs',
 			den_prop='totalcurrliab',
 			two_units=[None, None],
-			last_td='速动比率 = 速动资产 / 流动负债，其中速动资产  = 流动资产 - 存货',
+			last_td='速动比率 = 速动资产 / 流动负债，其中速动资产 = 流动资产 - 存货；格雷厄姆标准 >= 1',
 			only_dividedval_column=True)
 
 		# 资产负债比率 = 资产总额 / 负债总额
@@ -1118,8 +1146,59 @@ class AssetsDrawer(object):
 			den_forms='zcfzbs',
 			den_prop='totliab',
 			two_units=[None, None],
-			last_td='资产负债比率 = 资产总额 / 负债总额',
+			last_td='资产负债比率 = 资产总额 / 负债总额；格雷厄姆标准 >= 2',
 			only_dividedval_column=True)
+
+		# 股东权益 / 总负债，注意金融行业不适用于这个标准
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['股东权益 / 总负债', ''],
+			td_colors=[Cons.COLOR_WHITE, Cons.COLOR_WHITE],
+			num_forms='zcfzbs',
+			num_prop='righaggr',
+			den_forms='zcfzbs',
+			den_prop='totliab',
+			two_units=[None, None],
+			last_td='股东权益 / 总负债；格雷厄姆标准 >= 1，注意金融行业不适用于这个标准',
+			only_dividedval_column=True)
+
+        # 总负债 / 流动资产价值
+		self.comdrawer.add_dividedval_table_line(
+			two_tds=['总负债 / 流动资产价值', ''],
+			td_colors=[Cons.COLOR_WHITE, Cons.COLOR_WHITE],
+			num_forms='zcfzbs',
+			num_prop='totliab',
+			den_forms='zcfzbs',
+			den_prop='curassetvalue',
+			two_units=[None, None],
+			last_td='总负债 / 流动资产价值；格雷厄姆标准 <= 2',
+			only_dividedval_column=True)
+
+		# 清算价值 = (货币资金 + 交易性金融资产) + (应收票据 + 应收账款) * 0.8 + 存货 * 0.6 + (可供出售金融资产 + 持有至到期投资 + 投资性房地产) * 0.5 + (固定资产净额 + 在建工程 + 工程物资) * 0.15 - 总负债
+		self.comdrawer.add_num_table_line(
+			two_tds=['清算价值', ''],
+			td_colors=[Cons.COLOR_WHITE, Cons.COLOR_WHITE],
+			forms='zcfzbs',
+			prop='liquidvalue',
+			unit=Cons.Yi,
+			last_td='清算价值 = (货币资金 + 交易性金融资产) + (应收票据 + 应收账款) * 0.8 + 存货 * 0.6 + (可供出售金融资产 + 持有至到期投资 + 投资性房地产) * 0.5 + (固定资产净额 + 在建工程 + 工程物资) * 0.15 - 总负债')
+
+		# 流动资产价值 = 流动资产 - 总负债
+		self.comdrawer.add_num_table_line(
+			two_tds=['流动资产价值', ''],
+			td_colors=[Cons.COLOR_WHITE, Cons.COLOR_WHITE],
+			forms='zcfzbs',
+			prop='curassetvalue',
+			unit=Cons.Yi,
+			last_td='流动资产价值 = 流动资产 - 总负债')
+
+        # 现金资产价值 = 现金资产 - 总负债
+		self.comdrawer.add_num_table_line(
+			two_tds=['现金资产价值', ''],
+			td_colors=[Cons.COLOR_WHITE, Cons.COLOR_WHITE],
+			forms='zcfzbs',
+			prop='curfdsvalue',
+			unit=Cons.Yi,
+			last_td='现金资产价值 = 现金资产 - 总负债')
 
 		self.comdrawer.add_table_end()
 		self.comdrawer.add_end_and_save_to_stock_file(fname='资产负债表资产部分')

@@ -1651,6 +1651,22 @@ class GroupDrawer(object):
 			units=[None, Cons.Yi, Cons.Yi, None],
 			decending=True)
 
+		# 存货周转天数 = 360 / 存货周转率
+		# 行业均值规则
+		self.add_weightdave_dividedval_table(
+			html_util=html_util,
+			keys=keys,
+			caption='存货周转天数',
+			four_tds=['企业', '营业成本', '加权存货总额', '存货周转天数'],
+			last_td='从低到高排序；行业均值规则；存货周转天数 = 360 / 存货周转率',
+			num_forms='gslrbs',
+			num_property='bizcost',
+			den_forms='zcfzbs',
+			den_property='inve',
+			func=Cons.divideby_360_func,
+			units=[None, Cons.Yi, Cons.Yi, None],
+			decending=False)
+
 		# 固定资产周转率 = 营业收入 / 加权平均固定资产净额
 		# 行业均值规则
 		self.add_weightdave_dividedval_table(

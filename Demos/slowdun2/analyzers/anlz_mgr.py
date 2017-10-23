@@ -99,3 +99,13 @@ class AnlzMgr(object):
 		anlz_mgr = AnlzMgr(stock=stk)
 		anlz_mgr.draw()
 		group.append(stk)
+
+	@classmethod
+	def draw_others(self):
+		group = []
+		
+		stk = Stock(symbol='SH600298', name='安琪酵母', year_from = 2007)
+		anlz_mgr = AnlzMgr(stock=stk)
+		anlz_mgr.draw()
+		group.append(stk)
+	

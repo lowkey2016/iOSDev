@@ -59,6 +59,20 @@ class CommonDrawer(object):
 		assert len(two_tds) == 2
 		assert len(td_colors) == len(two_tds)
 		assert len(two_units) == 2
+
+		averate = 0
+		if dividedval_color_map_func == Cons.FUNC_compto_historyave_margins_color_map_func:
+			numtot = 0
+			dentot = 0
+			for k in keys:
+				numkeypath = '%s[%s].%s' % (num_forms, k, num_prop)
+				denkeypath = '%s[%s].%s' % (den_forms, k, den_prop)
+				numval = StockUtil.numValueForKeyPath(stock=self.stock, keypath=numkeypath)
+				denval = StockUtil.numValueForKeyPath(stock=self.stock, keypath=denkeypath)
+				numtot += numval
+				dentot += denval
+			averate = StockUtil.getDivideVal(num=numtot, den=dentot, use_percent_format=False)
+
 		html_util.add_table_body_td(td=two_tds[0], color=td_colors[0])
 		html_util.add_table_body_td(td=two_tds[1], color=td_colors[1])
 		for k in keys:
@@ -74,7 +88,10 @@ class CommonDrawer(object):
 			rate = StockUtil.getDivideVal(num=numval, den=denval, use_percent_format=False)
 
 			if dividedval_color_map_func:
-				color = dividedval_color_map_func(rate)
+				if dividedval_color_map_func == Cons.FUNC_compto_historyave_margins_color_map_func:
+					color = Cons.FUNC_compto_historyave_margins_color_map_func(val=rate, aveval=averate)
+				else:
+					color = dividedval_color_map_func(rate)
 			else:
 				color = Cons.COLOR_WHITE
 			if only_dividedval_column:
@@ -83,6 +100,8 @@ class CommonDrawer(object):
 			else:
 				html_util.add_table_body_td_val(val=numval, color=color, unit=two_units[0])
 				html_util.add_table_body_td_val(val=rate, color=color, unit=two_units[1])
+		if averate != 0:
+			last_td = '%s; 历史平均值为: %.2f' % (last_td, averate)
 		html_util.add_table_body_td(td=last_td, color=Cons.COLOR_WHITE)
 		html_util.add_table_body_tr_end()
 
@@ -241,4 +260,16 @@ class CommonDrawer(object):
 			html_util.add_table_body_td_val(val=num0val, color=Cons.COLOR_WHITE, unit=two_units[0])
 			html_util.add_table_body_td_val(val=num1val, color=Cons.COLOR_WHITE, unit=two_units[1])
 		html_util.add_table_body_td(td=last_td, color=Cons.COLOR_WHITE)
+		html_util.add_table_body_tr_end()
+
+	def add_capital_table_line(self, td, td_color, last_td):
+		html_util = self.html_util
+		keys = self.keys
+		
+		html_util.add_table_body_td(td=td, color=td_color)
+		html_util.add_table_body_td_empty(color=td_color)
+		for k in keys:
+			html_util.add_table_body_td_empty(color=td_color)
+			html_util.add_table_body_td_empty(color=td_color)
+		html_util.add_table_body_td(td=last_td, color=td_color)
 		html_util.add_table_body_tr_end()

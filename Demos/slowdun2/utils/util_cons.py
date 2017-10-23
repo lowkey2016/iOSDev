@@ -18,6 +18,7 @@ COLOR_PINK = '#FF6E97'
 COLOR_YELLOW = '#FFB86C'
 COLOR_BLUE = '#2E68AA'
 COLOR_PURPLE = '#8F1D78'
+COLOR_GRAY = '#EBEDF4'
 
 INDUSTRY_ELETRIC_KITCHEN = '厨电行业'
 
@@ -61,3 +62,23 @@ def valover0_map_func(val):
 		return COLOR_GREEN
 	else:
 		return COLOR_RED
+
+def divideby_360_func(val):
+	if int(val) == 0:
+		return 0
+	else:
+		return 360. / val
+
+def FUNC_compto_historyave_margins_color_map_func(val, aveval, margins_up=0.3, margins_down=0.3):
+	if val >= aveval:
+		rate = val / aveval - 1
+		if rate >= margins_up:
+			return COLOR_RED
+		else:
+			return COLOR_GREEN
+	else:
+		rate = aveval / val - 1
+		if rate >= margins_down:
+			return COLOR_RED
+		else:
+			return COLOR_GREEN
