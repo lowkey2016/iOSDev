@@ -1109,7 +1109,7 @@ class AssetsDrawer(object):
 			last_td='除以所有者权益合计')
 
 		self.comdrawer.add_capital_table_line(
-			td='格雷厄姆指标',
+			td='格雷厄姆标准',
 			td_color=Cons.COLOR_PURPLE,
 			last_td='')
 
@@ -1174,14 +1174,16 @@ class AssetsDrawer(object):
 			only_dividedval_column=True)
 
 		# 清算价值 = (货币资金 + 交易性金融资产) + (应收票据 + 应收账款) * 0.8 + 存货 * 0.6 + (可供出售金融资产 + 持有至到期投资 + 投资性房地产) * 0.5 + (固定资产净额 + 在建工程 + 工程物资) * 0.15 - 总负债
-		self.comdrawer.add_num_table_line(
+		self.comdrawer.add_val_growrate_comprate_table_lines(
 			two_tds=['清算价值', ''],
 			td_colors=[Cons.COLOR_WHITE, Cons.COLOR_WHITE],
-			forms='zcfzbs',
-			prop='liquidvalue',
-			unit=Cons.Yi,
+			num_forms='zcfzbs',
+			num_prop='liquidvalue',
+			den_forms='zcfzbs',
+			den_prop='totasset',
+			two_units=[Cons.Yi, Cons.Percent],
 			last_td='清算价值 = (货币资金 + 交易性金融资产) + (应收票据 + 应收账款) * 0.8 + 存货 * 0.6 + (可供出售金融资产 + 持有至到期投资 + 投资性房地产) * 0.5 + (固定资产净额 + 在建工程 + 工程物资) * 0.15 - 总负债')
-
+		
 		# 流动资产价值 = 流动资产 - 总负债
 		self.comdrawer.add_num_table_line(
 			two_tds=['流动资产价值', ''],

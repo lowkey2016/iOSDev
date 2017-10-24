@@ -175,7 +175,7 @@ class CommonDrawer(object):
 		self.add_comprate_table_line(
 			forms=num_forms,
 			prop=num_prop,
-			last_td=last_td)
+			last_td='')
 
 	def add_weightedave_dividedval_table_line(self, two_tds, td_colors, num_forms, num_prop, den_forms, den_prop, two_units, last_td, func=None, color_map_func=None):
 		html_util = self.html_util

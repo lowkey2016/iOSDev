@@ -68,6 +68,7 @@ class QuoteDrawer(object):
 
 		current = self.stock.quote.current
 		totalShares = self.stock.quote.totalShares
+		current_total = current * totalShares
 		currency_unit = self.stock.quote.currency_unit
 
 		td0 = '股价'
@@ -83,11 +84,10 @@ class QuoteDrawer(object):
 		self.add_table_line(two_tds=[td0, td1])
 
 		td0 = '流动比例'
-		td1 = '%.2f%%' % (self.stock.quote.float_shares / self.stock.quote.totalShares * 100)
+		td1 = '%.2f%%' % StockUtil.getDivideVal(num=self.stock.quote.float_shares, den=self.stock.quote.totalShares, use_percent_format=True)
 		self.add_table_line(two_tds=[td0, td1])
 
 		td0 = '总市值'
-		current_total = current * totalShares
 		td1 = '%.2f 亿' % (current_total / Cons.Yi)
 		self.add_table_line(two_tds=[td0, td1])
 
@@ -96,40 +96,40 @@ class QuoteDrawer(object):
 		self.add_table_line(two_tds=[td0, td1])
 
 		td0 = 'NAV'
-		nav = self.last_zcfzb.righaggr / totalShares
+		nav = StockUtil.getDivideVal(num=self.last_zcfzb.righaggr, den=totalShares, use_percent_format=False)
 		td1 = '%.2f %s' % (nav, currency_unit)
 		last_td = '参照的数值是 %d 年终的数据；除以总股本；下同' % self.max_report_year
 		self.add_table_line(two_tds=[td0, td1], last_td=last_td)
 
 		td0 = '市净率 PB'
-		pb = current / nav
+		pb = StockUtil.getDivideVal(num=current, den=nav, use_percent_format=False)
 		td1 = '%.2f' % pb
 		last_td = '购买 1 元净资产需要付出的价格'
 		self.add_table_line(two_tds=[td0, td1], last_td=last_td)
 
 		td0 = '每股经营现金流净额'
-		td1 = '%.2f %s' % (self.last_xjllb.mananetr / totalShares, currency_unit)
+		td1 = '%.2f %s' % (StockUtil.getDivideVal(num=self.last_xjllb.mananetr, den=totalShares, use_percent_format=False), currency_unit)
 		self.add_table_line(two_tds=[td0, td1])
 
 		td0 = '每股现金流'
-		td1 = '%.2f %s' % (self.last_xjllb.cashfinalbala / totalShares, currency_unit)
+		td1 = '%.2f %s' % (StockUtil.getDivideVal(num=self.last_xjllb.cashfinalbala, den=totalShares, use_percent_format=False), currency_unit)
 		self.add_table_line(two_tds=[td0, td1])
 
 		td0 = 'EPS'
-		eps = self.last_gslrb.parenetp / totalShares
+		eps = StockUtil.getDivideVal(num=self.last_gslrb.parenetp, den=totalShares, use_percent_format=False)
 		td1 = '%.2f %s' % (eps, currency_unit)
 		last_td = 'EPS = 归属于母公司的净利润 / 总股本'
 		self.add_table_line(two_tds=[td0, td1], last_td=last_td)
 
 		td0 = '市盈率 PE'
-		pe = current / eps
+		pe = StockUtil.getDivideVal(num=current, den=eps, use_percent_format=False)
 		td1 = '%.2f' % pe
 		last_td = '购买这家企业回本需要多少年'
 		self.add_table_line(two_tds=[td0, td1], last_td=last_td)
 
 		td0 = '盈利率'
-		ep = 1/pe
-		td1 = '%.2f%%' % (1 / pe * 100)
+		ep = StockUtil.getDivideVal(num=1, den=pe, use_percent_format=False)
+		td1 = '%.2f%%' % (ep * 100)
 		if ep >= 0.0432 * 2:
 			color = Cons.COLOR_GREEN
 		else:
@@ -138,13 +138,13 @@ class QuoteDrawer(object):
 		self.add_table_line(two_tds=[td0, td1], color=color, last_td=last_td)
 
 		td0 = '每股销售额'
-		sps = self.last_gslrb.bizinco / totalShares
+		sps = StockUtil.getDivideVal(num=self.last_gslrb.bizinco, den=totalShares, use_percent_format=False)
 		td1 = '%.2f %s' % (sps, currency_unit)
 		last_td = '每股销售额 = 营业收入 / 总股本'
 		self.add_table_line(two_tds=[td0, td1], last_td=last_td)
 
 		td0 = '市销率'
-		td1 = '%.2f' % (current / sps)
+		td1 = '%.2f' % StockUtil.getDivideVal(num=current, den=sps, use_percent_format=False)
 		self.add_table_line(two_tds=[td0, td1])
 
 		td0 = '每股股息'
@@ -152,7 +152,7 @@ class QuoteDrawer(object):
 		self.add_table_line(two_tds=[td0, td1])
 
 		td0 = '股息率'
-		divyield = self.stock.quote.dividend / current
+		divyield = StockUtil.getDivideVal(num=self.stock.quote.dividend, den=current, use_percent_format=False)
 		td1 = '%.2f%%' % (divyield * 100)
 		if divyield >= 0.0432 * 2/3:
 			color = Cons.COLOR_GREEN
@@ -162,7 +162,7 @@ class QuoteDrawer(object):
 		self.add_table_line(two_tds=[td0, td1], color=color, last_td=last_td)
 
 		td0 = '资本结构'
-		capstruct = current_total / (current_total + self.last_zcfzb.totliab)
+		capstruct = StockUtil.getDivideVal(num=current_total, den=(current_total + self.last_zcfzb.totliab), use_percent_format=False)
 		td1 = '%.2f%%' % (capstruct * 100)
 		if capstruct < 1./3:
 			color = Cons.COLOR_RED
